@@ -1,0 +1,22 @@
+[package]
+name = "zsplit"
+version = "0.1.0"
+authors = ["ZSchoen <dev@zschoen.dev>"]
+edition = "2018"
+license = "GPL-3.0-or-later"
+readme = "README.md"
+homepage = "https://zschoen.dev/projects/zsplit"
+repository = "https://github.com/TheAlgorythm/zsplit"
+documentation = "https://docs.rs/crate/zsplit"
+description = "Split text into multiple files"
+keywords = ["split", "text", "coreutils", "cli", "utility"]
+categories = ["command-line-utilities"]
+
+[profile.release]
+lto = "thin"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+clap = "3.0.0-beta.5"
+thiserror = "1.0.30"
