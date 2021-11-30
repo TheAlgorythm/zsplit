@@ -30,7 +30,7 @@ It splits the input into single lines and writes them Round Robin like to the ou
 ### Example
 
 ```console
-$ cat test_folder/ten.txt
+$ seq 0 9 >test_folder/ten.txt; cat test_folder/ten.txt
 0
 1
 2
