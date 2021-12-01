@@ -1,6 +1,10 @@
 use clap::Parser;
 use std::path::PathBuf;
 
+#[cfg(test)]
+#[path = "./cli_test.rs"]
+pub mod cli_test;
+
 #[derive(Parser, Debug)]
 #[clap(about, author)]
 pub struct Cli {
