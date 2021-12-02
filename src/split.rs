@@ -6,6 +6,10 @@ use std::fs::File;
 use std::io;
 use std::path::Path;
 
+#[cfg(test)]
+#[path = "./split_test.rs"]
+mod split_test;
+
 pub fn split(current_file: &Path, new_files: &[NewFile]) -> Result<(), io::Error> {
     let new_buffers = create_buffers(new_files)?;
 
@@ -35,15 +39,31 @@ fn map_line_buffers<'a, B>(new_files: &[NewFile], new_buffers: &'a [B]) -> HashM
     new_files
         .iter()
         .enumerate()
-        .fold(HashMap::new(), |mut mapped_line_buffers, (index, new)| {
-            let line_ring_size = mapped_line_buffers.len();
-            (line_ring_size..line_ring_size + new.assigned_lines).for_each(|line_index| {
-                assert!(mapped_line_buffers
-                    .insert(line_index, &new_buffers[index])
-                    .is_none());
-            });
-            mapped_line_buffers
+        .scan(0, |line_ring_size, (index, new)| {
+            let old_line_ring_size = *line_ring_size;
+            *line_ring_size += new.assigned_lines;
+            let buffer = &new_buffers[index];
+
+            Some(create_line_buffer_mapping(
+                old_line_ring_size,
+                *line_ring_size,
+                buffer,
+            ))
         })
+        .flatten()
+        .collect()
+}
+
+fn create_line_buffer_mapping<B>(
+    old_line_ring_size: usize,
+    line_ring_size: usize,
+    buffer: &B,
+) -> HashMap<usize, &B> {
+    assert!(old_line_ring_size <= line_ring_size);
+
+    (old_line_ring_size..line_ring_size)
+        .map(|line_index| (line_index, buffer))
+        .collect()
 }
 
 fn write_lines<R: Read, W: Write>(
