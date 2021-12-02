@@ -1,5 +1,9 @@
 # zsplit
 
+![GPL 3.0 License](https://img.shields.io/github/license/TheAlgorythm/zsplit?style=for-the-badge&logo=open-source-initiative)
+[![Crates.io](https://img.shields.io/crates/v/zsplit?style=for-the-badge&logo=rust)](https://crates.io/crates/zsplit)
+[![crev reviews](https://web.crev.dev/rust-reviews/badge/crev_count/zsplit.svg)](https://web.crev.dev/rust-reviews/crate/zsplit/)
+
 Split text into multiple files.
 
 ## Usage
