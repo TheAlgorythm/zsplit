@@ -1,6 +1,6 @@
 [package]
 name = "zsplit"
-version = "0.1.0"
+version = "0.1.1"
 authors = ["ZSchoen <dev@zschoen.dev>"]
 edition = "2018"
 license = "GPL-3.0-or-later"
@@ -19,4 +19,3 @@ lto = "thin"
 
 [dependencies]
 clap = "3.0.0-beta.5"
-thiserror = "1.0.30"
