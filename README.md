@@ -85,7 +85,7 @@ $ cat test_folder/c
 
 ### Cargo
 
-```zsh
+```console
 $ cargo install zsplit
 ```
 
