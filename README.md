@@ -31,16 +31,25 @@ OPTIONS:
 
 It splits the input into single lines and writes them Round Robin like to the output files.
 
-### Example
+### Examples
+
+#### Setup
 
 ```console
 $ seq 0 9 >test_folder/ten.txt; cat test_folder/ten.txt
 0
 1
 2
-...
+[...]
 8
 9
+```
+
+![Visualisation of simple](docs/simple.svg)
+
+#### Simple
+
+```console
 $ zsplit test_folder/ten.txt --new-files test_folder/{a,b,c}
 $ cat test_folder/a
 0
@@ -51,10 +60,15 @@ $ cat test_folder/b
 1
 4
 7
-$ cat test_folder/a
+$ cat test_folder/c
 2
 5
 8
+```
+
+#### Unsymmetric Distribution
+
+```console
 $ zsplit test_folder/ten.txt --new-files test_folder/{a,b,c} --distribution 3 3 # The last distribution value is implicitly 1
 $ cat test_folder/a
 0
@@ -69,6 +83,11 @@ $ cat test_folder/b
 5
 $ cat test_folder/c
 6
+```
+
+#### Multiple Lines
+
+```console
 $ zsplit test_folder/ten.txt --new-files test_folder/{a,b,c} --line-factor 2
 $ cat test_folder/a
 0
