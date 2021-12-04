@@ -45,8 +45,6 @@ $ seq 0 9 >test_folder/ten.txt; cat test_folder/ten.txt
 9
 ```
 
-![Visualisation of simple](docs/simple.svg)
-
 #### Simple
 
 ```console
@@ -65,6 +63,8 @@ $ cat test_folder/c
 5
 8
 ```
+
+![Visualisation of simple](docs/simple.svg)
 
 #### Unsymmetric Distribution
 
