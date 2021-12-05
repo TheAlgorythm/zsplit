@@ -85,6 +85,8 @@ $ cat test_folder/c
 6
 ```
 
+![Visualisation of unsymmetric distribution](docs/unsymmetric_distribution.svg)
+
 #### Multiple Lines
 
 ```console
@@ -103,6 +105,8 @@ $ cat test_folder/c
 4
 5
 ```
+
+![Visualisation of multiple lines](docs/multiple_lines.svg)
 
 ## Installation
 
