@@ -1,4 +1,5 @@
 use clap::Parser;
+use std::num::NonZeroUsize;
 use std::path::PathBuf;
 
 #[cfg(test)]
@@ -9,12 +10,12 @@ pub mod cli_test;
 #[clap(about, author)]
 pub struct Cli {
     #[clap(short = 'f', long, default_value = "1")]
-    pub line_factor: usize,
+    pub line_factor: NonZeroUsize,
     pub splitting_file: PathBuf,
     #[clap(short, long)]
     pub new_files: Vec<PathBuf>,
     #[clap(short, long)]
-    pub distribution: Vec<usize>,
+    pub distribution: Vec<NonZeroUsize>,
 }
 
 impl Cli {
@@ -24,9 +25,16 @@ impl Cli {
             .enumerate()
             .map(|(index, file)| NewFile {
                 file: file.clone(),
-                assigned_lines: self.line_factor * self.distribution.get(index).unwrap_or(&1),
+                assigned_lines: usize::from(self.line_factor) * self.get_distribution(index),
             })
             .collect()
+    }
+
+    fn get_distribution(&self, index: usize) -> usize {
+        self.distribution
+            .get(index)
+            .map(|distribution| usize::from(*distribution))
+            .unwrap_or(1)
     }
 }
 

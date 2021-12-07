@@ -1,8 +1,9 @@
 use super::*;
+use std::convert::TryInto;
 
 fn empty_cli() -> Cli {
     Cli {
-        line_factor: 1,
+        line_factor: 1_usize.try_into().unwrap(),
         splitting_file: PathBuf::new(),
         new_files: vec![PathBuf::new(), PathBuf::new(), PathBuf::new()],
         distribution: Vec::new(),
@@ -22,7 +23,7 @@ fn default_distribution() {
 #[test]
 fn default_distribution_with_line_factor() {
     let mut cli = empty_cli();
-    cli.line_factor = 2;
+    cli.line_factor = 2_usize.try_into().unwrap();
 
     let new_files = cli.new_files();
 
@@ -35,7 +36,7 @@ fn default_distribution_with_line_factor() {
 #[test]
 fn partial_distribution() {
     let mut cli = empty_cli();
-    cli.distribution = vec![3, 3];
+    cli.distribution = vec![3_usize.try_into().unwrap(), 3_usize.try_into().unwrap()];
 
     let new_files = cli.new_files();
 
@@ -48,8 +49,8 @@ fn partial_distribution() {
 #[test]
 fn partial_distribution_with_line_factor() {
     let mut cli = empty_cli();
-    cli.distribution = vec![3, 3];
-    cli.line_factor = 2;
+    cli.distribution = vec![3_usize.try_into().unwrap(), 3_usize.try_into().unwrap()];
+    cli.line_factor = 2_usize.try_into().unwrap();
 
     let new_files = cli.new_files();
 
