@@ -9,3 +9,17 @@ pub mod split;
 
 pub use cli::Cli;
 pub use split::split;
+
+use io::{BufRead, BufReader};
+use std::fs::File;
+use std::io;
+use std::path::PathBuf;
+
+pub fn reading_buffer(current_file: &Option<PathBuf>) -> Result<Box<dyn BufRead>, io::Error> {
+    if let Some(current_file) = current_file {
+        Ok(Box::new(BufReader::new(File::open(current_file)?)))
+    } else {
+        let stdin = Box::leak(Box::new(io::stdin()));
+        Ok(Box::new(stdin.lock()))
+    }
+}

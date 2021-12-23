@@ -1,21 +1,18 @@
 use crate::cli::NewFile;
-use io::{BufRead, BufReader, BufWriter, Read, Write};
+use io::{BufRead, BufWriter, Write};
 use std::cell::RefCell;
 use std::collections::HashMap;
 use std::fs::File;
 use std::io;
-use std::path::Path;
 
 #[cfg(test)]
 #[path = "./split_test.rs"]
 mod split_test;
 
-pub fn split(current_file: &Path, new_files: &[NewFile]) -> Result<(), io::Error> {
+pub fn split(source: &mut dyn BufRead, new_files: &[NewFile]) -> Result<(), io::Error> {
     let new_buffers = create_buffers(new_files)?;
 
     let mapped_line_buffers = map_line_buffers(new_files, &new_buffers);
-
-    let source = BufReader::new(File::open(current_file)?);
 
     write_lines(source, &mapped_line_buffers)?;
 
@@ -66,8 +63,8 @@ fn create_line_buffer_mapping<B>(
         .collect()
 }
 
-fn write_lines<R: Read, W: Write>(
-    source: BufReader<R>,
+fn write_lines<W: Write>(
+    source: &mut dyn BufRead,
     mapped_line_buffers: &HashMap<usize, &RefCell<W>>,
 ) -> Result<(), io::Error> {
     let line_ring_size = mapped_line_buffers.len();

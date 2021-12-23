@@ -4,7 +4,7 @@ use std::convert::TryInto;
 fn empty_cli() -> Cli {
     Cli {
         line_factor: 1_usize.try_into().unwrap(),
-        splitting_file: PathBuf::new(),
+        splitting_file: Some(PathBuf::new()),
         new_files: vec![PathBuf::new(), PathBuf::new(), PathBuf::new()],
         distribution: Vec::new(),
     }

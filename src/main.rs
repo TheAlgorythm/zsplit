@@ -5,12 +5,26 @@
 #![warn(clippy::cognitive_complexity)]
 
 use clap::Parser;
-use zsplit::{split, Cli};
+use zsplit::{reading_buffer, split, Cli};
 
 fn main() {
     let cli = Cli::parse();
 
-    if let Err(error) = split(&cli.splitting_file, &cli.new_files()) {
+    if let Err(error) = cli.validate() {
         eprintln!("Error: {}", error);
+        std::process::exit(-1);
+    }
+
+    let mut source = match reading_buffer(&cli.splitting_file) {
+        Ok(source) => source,
+        Err(error) => {
+            eprintln!("Error: {}", error);
+            std::process::exit(-1);
+        }
+    };
+
+    if let Err(error) = split(&mut source, &cli.new_files()) {
+        eprintln!("Error: {}", error);
+        std::process::exit(-1);
     }
 }
