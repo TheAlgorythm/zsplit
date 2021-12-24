@@ -15,14 +15,17 @@ pub enum Error {
 }
 
 #[derive(Parser, Debug)]
-#[clap(about, author)]
+#[clap(about, author, version)]
 pub struct Cli {
     #[clap(short = 'f', long, default_value = "1")]
     pub line_factor: NonZeroUsize,
+
     pub splitting_file: Option<PathBuf>,
-    #[clap(short, long)]
+
+    #[clap(multiple_values(true), min_values(2), required(true))]
     pub new_files: Vec<PathBuf>,
-    #[clap(short, long)]
+
+    #[clap(short, long, multiple_values(true), min_values(0))]
     pub distribution: Vec<NonZeroUsize>,
 }
 

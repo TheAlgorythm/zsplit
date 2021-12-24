@@ -17,16 +17,16 @@ ZSchoen <dev@zschoen.dev>
 Split text into multiple files
 
 USAGE:
-    zsplit [OPTIONS] <SPLITTING_FILE>
+    zsplit [OPTIONS] <NEW_FILES>... [--] [SPLITTING_FILE]
 
 ARGS:
     <SPLITTING_FILE>
+    <NEW_FILES>...
 
 OPTIONS:
     -d, --distribution <DISTRIBUTION>...
     -f, --line-factor <LINE_FACTOR>         [default: 1]
     -h, --help                              Print help information
-    -n, --new-files <NEW_FILES>...
 ```
 
 It splits the input into single lines and writes them Round Robin like to the output files.
@@ -48,7 +48,7 @@ $ seq 0 9 >test_folder/ten.txt; cat test_folder/ten.txt
 #### Simple
 
 ```console
-$ zsplit test_folder/ten.txt --new-files test_folder/{a,b,c}
+$ zsplit test_folder/ten.txt test_folder/{a,b,c}
 $ cat test_folder/a
 0
 3
@@ -69,7 +69,7 @@ $ cat test_folder/c
 #### Unsymmetric Distribution
 
 ```console
-$ zsplit test_folder/ten.txt --new-files test_folder/{a,b,c} --distribution 3 3 # The last distribution value is implicitly 1
+$ zsplit test_folder/ten.txt test_folder/{a,b,c} --distribution 3 3 # The last distribution value is implicitly 1
 $ cat test_folder/a
 0
 1
@@ -90,7 +90,7 @@ $ cat test_folder/c
 #### Multiple Lines
 
 ```console
-$ zsplit test_folder/ten.txt --new-files test_folder/{a,b,c} --line-factor 2
+$ zsplit test_folder/ten.txt test_folder/{a,b,c} --line-factor 2
 $ cat test_folder/a
 0
 1
