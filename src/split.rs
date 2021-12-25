@@ -1,4 +1,4 @@
-use crate::cli::NewFile;
+use crate::cli::Destination;
 use io::{BufRead, BufWriter, Write};
 use std::cell::RefCell;
 use std::collections::HashMap;
@@ -9,20 +9,22 @@ use std::io;
 #[path = "./split_test.rs"]
 mod split_test;
 
-pub fn split(source: &mut dyn BufRead, new_files: &[NewFile]) -> Result<(), io::Error> {
-    let new_buffers = create_buffers(new_files)?;
+pub fn split(source: &mut dyn BufRead, destinations: &[Destination]) -> Result<(), io::Error> {
+    let destination_buffers = create_buffers(destinations)?;
 
-    let mapped_line_buffers = map_line_buffers(new_files, &new_buffers);
+    let mapped_line_buffers = map_line_buffers(destinations, &destination_buffers);
 
     write_lines(source, &mapped_line_buffers)?;
 
-    flush_buffers(&new_buffers)?;
+    flush_buffers(&destination_buffers)?;
 
     Ok(())
 }
 
-fn create_buffers(new_files: &[NewFile]) -> Result<Vec<RefCell<BufWriter<File>>>, io::Error> {
-    new_files
+fn create_buffers(
+    destinations: &[Destination],
+) -> Result<Vec<RefCell<BufWriter<File>>>, io::Error> {
+    destinations
         .iter()
         .map(|new| {
             File::create(new.file.clone())
@@ -32,14 +34,17 @@ fn create_buffers(new_files: &[NewFile]) -> Result<Vec<RefCell<BufWriter<File>>>
         .collect()
 }
 
-fn map_line_buffers<'a, B>(new_files: &[NewFile], new_buffers: &'a [B]) -> HashMap<usize, &'a B> {
-    new_files
+fn map_line_buffers<'a, B>(
+    destinations: &[Destination],
+    destination_buffers: &'a [B],
+) -> HashMap<usize, &'a B> {
+    destinations
         .iter()
         .enumerate()
         .scan(0, |line_ring_size, (index, new)| {
             let old_line_ring_size = *line_ring_size;
             *line_ring_size += new.assigned_lines;
-            let buffer = &new_buffers[index];
+            let buffer = &destination_buffers[index];
 
             Some(create_line_buffer_mapping(
                 old_line_ring_size,

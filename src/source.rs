@@ -4,16 +4,16 @@ use std::io;
 use std::path::PathBuf;
 
 #[cfg(test)]
-#[path = "./input_test.rs"]
-mod input_test;
+#[path = "./source_test.rs"]
+mod source_test;
 
 #[derive(Debug, PartialEq)]
-pub enum Input {
+pub enum Source {
     PathBuf(PathBuf),
     StdIn,
 }
 
-impl Input {
+impl Source {
     pub fn reading_buffer(&self) -> Result<Box<dyn BufRead>, io::Error> {
         match self {
             Self::PathBuf(current_file) => Ok(Box::new(BufReader::new(File::open(current_file)?))),

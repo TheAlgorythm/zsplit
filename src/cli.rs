@@ -1,4 +1,4 @@
-use crate::input::Input;
+use crate::source::Source;
 use bool_ext::BoolExt;
 use clap::{Parser, ValueHint};
 use std::num::NonZeroUsize;
@@ -18,12 +18,15 @@ pub enum Error {
 #[derive(Parser, Debug)]
 #[clap(about, author, version)]
 pub struct Cli {
+    /// A factor to multiply the grouping size of the distribution.
     #[clap(short = 'f', long, default_value = "1")]
     pub line_factor: NonZeroUsize,
 
-    #[clap(parse(from_os_str = Input::from_os_str), value_hint(ValueHint::FilePath))]
-    pub splitting_file: Input,
+    /// The file which should be splitted. Use '-' for piping the content to zsplit.
+    #[clap(parse(from_os_str = Source::from_os_str), value_hint(ValueHint::FilePath))]
+    pub source: Source,
 
+    /// A list of destinations for the splitted contents.
     #[clap(
         multiple_values(true),
         min_values(2),
@@ -31,16 +34,18 @@ pub struct Cli {
         parse(from_os_str),
         value_hint(ValueHint::FilePath)
     )]
-    pub new_files: Vec<PathBuf>,
+    pub destinations: Vec<PathBuf>,
 
+    /// Defines how many lines are assigned to a destination. The distributions have to be in the
+    /// same order as the destinations.
     #[clap(short, long, multiple_values(true), min_values(0))]
     pub distribution: Vec<NonZeroUsize>,
 }
 
 impl Cli {
     pub fn validate(&self) -> Result<(), Error> {
-        if let Input::PathBuf(splitting_file) = &self.splitting_file {
-            self.new_files
+        if let Source::PathBuf(splitting_file) = &self.source {
+            self.destinations
                 .iter()
                 .all(|new_file| splitting_file != new_file)
                 .err(Error::FileDuplicate)?;
@@ -48,11 +53,11 @@ impl Cli {
         Ok(())
     }
 
-    pub fn new_files(&self) -> Vec<NewFile> {
-        self.new_files
+    pub fn new_files(&self) -> Vec<Destination> {
+        self.destinations
             .iter()
             .enumerate()
-            .map(|(index, file)| NewFile {
+            .map(|(index, file)| Destination {
                 file: file.clone(),
                 assigned_lines: usize::from(self.line_factor) * self.get_distribution(index),
             })
@@ -68,7 +73,7 @@ impl Cli {
 }
 
 #[derive(Debug)]
-pub struct NewFile {
+pub struct Destination {
     pub assigned_lines: usize,
     pub file: PathBuf,
 }

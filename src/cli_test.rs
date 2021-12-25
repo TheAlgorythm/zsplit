@@ -4,8 +4,8 @@ use std::convert::TryInto;
 fn empty_cli() -> Cli {
     Cli {
         line_factor: 1_usize.try_into().unwrap(),
-        splitting_file: Input::PathBuf(PathBuf::new()),
-        new_files: vec![PathBuf::new(), PathBuf::new(), PathBuf::new()],
+        source: Source::PathBuf(PathBuf::new()),
+        destinations: vec![PathBuf::new(), PathBuf::new(), PathBuf::new()],
         distribution: Vec::new(),
     }
 }
@@ -20,7 +20,7 @@ fn invalid_splitting_file_in_new_files() {
 #[test]
 fn valid_splitting_file_not_in_new_files() {
     let mut cli = empty_cli();
-    cli.splitting_file = Input::PathBuf(PathBuf::from("test.txt"));
+    cli.source = Source::PathBuf(PathBuf::from("test.txt"));
 
     assert_eq!(cli.validate(), Ok(()));
 }
@@ -28,7 +28,7 @@ fn valid_splitting_file_not_in_new_files() {
 #[test]
 fn valid_splitting_file_stdin() {
     let mut cli = empty_cli();
-    cli.splitting_file = Input::StdIn;
+    cli.source = Source::StdIn;
 
     assert_eq!(cli.validate(), Ok(()));
 }

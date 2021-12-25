@@ -4,15 +4,15 @@ use std::path::PathBuf;
 #[test]
 fn simple_map_line_buffers() {
     let new_files = [
-        NewFile {
+        Destination {
             file: PathBuf::new(),
             assigned_lines: 1,
         },
-        NewFile {
+        Destination {
             file: PathBuf::new(),
             assigned_lines: 2,
         },
-        NewFile {
+        Destination {
             file: PathBuf::new(),
             assigned_lines: 3,
         },
@@ -36,11 +36,11 @@ fn simple_map_line_buffers() {
 #[should_panic]
 fn unsymmetric_map_line_buffers() {
     let new_files = [
-        NewFile {
+        Destination {
             file: PathBuf::new(),
             assigned_lines: 1,
         },
-        NewFile {
+        Destination {
             file: PathBuf::new(),
             assigned_lines: 1,
         },
@@ -54,11 +54,11 @@ fn unsymmetric_map_line_buffers() {
 #[test]
 fn empty_assigned_lines_map_line_buffers() {
     let new_files = [
-        NewFile {
+        Destination {
             file: PathBuf::new(),
             assigned_lines: 0,
         },
-        NewFile {
+        Destination {
             file: PathBuf::new(),
             assigned_lines: 1,
         },

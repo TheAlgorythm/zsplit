@@ -5,7 +5,7 @@
 #![warn(clippy::cognitive_complexity)]
 
 pub mod cli;
-pub mod input;
+pub mod source;
 pub mod split;
 
 pub use cli::Cli;

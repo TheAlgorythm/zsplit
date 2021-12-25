@@ -10,24 +10,31 @@ Split text into multiple files.
 
 ```console
 $ zsplit --help
-zsplit
-
+zsplit 0.1.1
 ZSchoen <dev@zschoen.dev>
-
 Split text into multiple files
 
 USAGE:
-    zsplit [OPTIONS] <SPLITTING_FILE> <NEW_FILES>...
+    zsplit [OPTIONS] <SOURCE> <DESTINATIONS>...
 
 ARGS:
-    <SPLITTING_FILE>
-    <NEW_FILES>...
+    <SOURCE>             The file which should be splitted. Use '-' for piping the content to
+                         zsplit
+    <DESTINATIONS>...    A list of destinations for the splitted contents
 
 OPTIONS:
     -d, --distribution <DISTRIBUTION>...
-    -f, --line-factor <LINE_FACTOR>         [default: 1]
-    -h, --help                              Print help information
-    -V, --version                           Print version information
+            Defines how many lines are assigned to a destination. The distributions have to be in
+            the same order as the destinations
+
+    -f, --line-factor <LINE_FACTOR>
+            A factor to multiply the grouping size of the distribution [default: 1]
+
+    -h, --help
+            Print help information
+
+    -V, --version
+            Print version information
 ```
 
 It splits the input into single lines and writes them Round Robin like to the output files.

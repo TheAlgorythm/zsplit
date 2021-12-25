@@ -15,7 +15,7 @@ fn main() {
         std::process::exit(-1);
     }
 
-    let mut source = match cli.splitting_file.reading_buffer() {
+    let mut source = match cli.source.reading_buffer() {
         Ok(source) => source,
         Err(error) => {
             eprintln!("Error: {}", error);
