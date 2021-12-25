@@ -10,7 +10,7 @@ Split text into multiple files.
 
 ```console
 $ zsplit --help
-zsplit 0.1.1
+zsplit 0.2.0
 ZSchoen <dev@zschoen.dev>
 Split text into multiple files
 
