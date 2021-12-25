@@ -5,7 +5,7 @@
 #![warn(clippy::cognitive_complexity)]
 
 use clap::Parser;
-use zsplit::{reading_buffer, split, Cli};
+use zsplit::{split, Cli};
 
 fn main() {
     let cli = Cli::parse();
@@ -15,7 +15,7 @@ fn main() {
         std::process::exit(-1);
     }
 
-    let mut source = match reading_buffer(&cli.splitting_file) {
+    let mut source = match cli.splitting_file.reading_buffer() {
         Ok(source) => source,
         Err(error) => {
             eprintln!("Error: {}", error);

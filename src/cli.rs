@@ -1,5 +1,6 @@
+use crate::input::Input;
 use bool_ext::BoolExt;
-use clap::Parser;
+use clap::{Parser, ValueHint};
 use std::num::NonZeroUsize;
 use std::path::PathBuf;
 use thiserror::Error;
@@ -8,7 +9,7 @@ use thiserror::Error;
 #[path = "./cli_test.rs"]
 pub mod cli_test;
 
-#[derive(Error, Debug)]
+#[derive(Error, Debug, PartialEq)]
 pub enum Error {
     #[error("The splitting_file is also in new_files.")]
     FileDuplicate,
@@ -20,9 +21,16 @@ pub struct Cli {
     #[clap(short = 'f', long, default_value = "1")]
     pub line_factor: NonZeroUsize,
 
-    pub splitting_file: Option<PathBuf>,
+    #[clap(parse(from_os_str = Input::from_os_str), value_hint(ValueHint::FilePath))]
+    pub splitting_file: Input,
 
-    #[clap(multiple_values(true), min_values(2), required(true))]
+    #[clap(
+        multiple_values(true),
+        min_values(2),
+        required(true),
+        parse(from_os_str),
+        value_hint(ValueHint::FilePath)
+    )]
     pub new_files: Vec<PathBuf>,
 
     #[clap(short, long, multiple_values(true), min_values(0))]
@@ -31,7 +39,7 @@ pub struct Cli {
 
 impl Cli {
     pub fn validate(&self) -> Result<(), Error> {
-        if let Some(splitting_file) = &self.splitting_file {
+        if let Input::PathBuf(splitting_file) = &self.splitting_file {
             self.new_files
                 .iter()
                 .all(|new_file| splitting_file != new_file)

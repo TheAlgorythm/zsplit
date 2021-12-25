@@ -17,7 +17,7 @@ ZSchoen <dev@zschoen.dev>
 Split text into multiple files
 
 USAGE:
-    zsplit [OPTIONS] <NEW_FILES>... [--] [SPLITTING_FILE]
+    zsplit [OPTIONS] <SPLITTING_FILE> <NEW_FILES>...
 
 ARGS:
     <SPLITTING_FILE>
@@ -27,6 +27,7 @@ OPTIONS:
     -d, --distribution <DISTRIBUTION>...
     -f, --line-factor <LINE_FACTOR>         [default: 1]
     -h, --help                              Print help information
+    -V, --version                           Print version information
 ```
 
 It splits the input into single lines and writes them Round Robin like to the output files.
