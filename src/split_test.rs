@@ -3,7 +3,7 @@ use std::path::PathBuf;
 
 #[test]
 fn simple_map_line_buffers() {
-    let new_files = [
+    let destinations = [
         Destination {
             file: PathBuf::new(),
             assigned_lines: 1,
@@ -20,11 +20,11 @@ fn simple_map_line_buffers() {
 
     let mock_buffers = [0, 1, 2];
 
-    let mapped_line_buffers = map_line_buffers(&new_files, &mock_buffers);
+    let mapped_line_buffers = map_line_buffers(&destinations, &mock_buffers);
 
     assert_eq!(
         mapped_line_buffers.len(),
-        new_files.iter().map(|new| new.assigned_lines).sum()
+        destinations.iter().map(|new| new.assigned_lines).sum()
     );
 
     assert_eq!(*mapped_line_buffers[&0], 0);
@@ -35,7 +35,7 @@ fn simple_map_line_buffers() {
 #[test]
 #[should_panic]
 fn unsymmetric_map_line_buffers() {
-    let new_files = [
+    let destinations = [
         Destination {
             file: PathBuf::new(),
             assigned_lines: 1,
@@ -48,12 +48,12 @@ fn unsymmetric_map_line_buffers() {
 
     let mock_buffers = [0];
 
-    map_line_buffers(&new_files, &mock_buffers);
+    map_line_buffers(&destinations, &mock_buffers);
 }
 
 #[test]
 fn empty_assigned_lines_map_line_buffers() {
-    let new_files = [
+    let destinations = [
         Destination {
             file: PathBuf::new(),
             assigned_lines: 0,
@@ -66,11 +66,11 @@ fn empty_assigned_lines_map_line_buffers() {
 
     let mock_buffers = [0, 1];
 
-    let mapped_line_buffers = map_line_buffers(&new_files, &mock_buffers);
+    let mapped_line_buffers = map_line_buffers(&destinations, &mock_buffers);
 
     assert_eq!(
         mapped_line_buffers.len(),
-        new_files.iter().map(|new| new.assigned_lines).sum()
+        destinations.iter().map(|new| new.assigned_lines).sum()
     );
 
     assert_eq!(*mapped_line_buffers[&0], 1);

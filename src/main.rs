@@ -23,7 +23,7 @@ fn main() {
         }
     };
 
-    if let Err(error) = split(&mut source, &cli.new_files()) {
+    if let Err(error) = split(&mut source, &cli.destinations()) {
         eprintln!("Error: {}", error);
         std::process::exit(-1);
     }

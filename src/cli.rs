@@ -11,8 +11,13 @@ pub mod cli_test;
 
 #[derive(Error, Debug, PartialEq)]
 pub enum Error {
-    #[error("The splitting_file is also in new_files.")]
+    #[error("The source is also in destinations.")]
     FileDuplicate,
+    #[error("The quantity of destinations ({destinations_len}) is smaller as of distributions ({distributions_len}).")]
+    MoreDistributionsAsDestinations {
+        destinations_len: usize,
+        distributions_len: usize,
+    },
 }
 
 #[derive(Parser, Debug)]
@@ -37,23 +42,31 @@ pub struct Cli {
     pub destinations: Vec<PathBuf>,
 
     /// Defines how many lines are assigned to a destination. The distributions have to be in the
-    /// same order as the destinations.
+    /// same order as the destinations. It defaults to 1.
     #[clap(short, long, multiple_values(true), min_values(0))]
-    pub distribution: Vec<NonZeroUsize>,
+    pub distributions: Vec<NonZeroUsize>,
 }
 
 impl Cli {
     pub fn validate(&self) -> Result<(), Error> {
-        if let Source::PathBuf(splitting_file) = &self.source {
+        if let Source::PathBuf(source) = &self.source {
             self.destinations
                 .iter()
-                .all(|new_file| splitting_file != new_file)
+                .all(|destination| source != destination)
                 .err(Error::FileDuplicate)?;
         }
+
+        let (destinations_len, distributions_len) =
+            (self.destinations.len(), self.distributions.len());
+        (destinations_len >= distributions_len).err(Error::MoreDistributionsAsDestinations {
+            destinations_len,
+            distributions_len,
+        })?;
+
         Ok(())
     }
 
-    pub fn new_files(&self) -> Vec<Destination> {
+    pub fn destinations(&self) -> Vec<Destination> {
         self.destinations
             .iter()
             .enumerate()
@@ -65,7 +78,7 @@ impl Cli {
     }
 
     fn get_distribution(&self, index: usize) -> usize {
-        self.distribution
+        self.distributions
             .get(index)
             .map(|distribution| usize::from(*distribution))
             .unwrap_or(1)

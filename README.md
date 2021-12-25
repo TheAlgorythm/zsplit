@@ -23,9 +23,9 @@ ARGS:
     <DESTINATIONS>...    A list of destinations for the splitted contents
 
 OPTIONS:
-    -d, --distribution <DISTRIBUTION>...
+    -d, --distributions <DISTRIBUTIONS>...
             Defines how many lines are assigned to a destination. The distributions have to be in
-            the same order as the destinations
+            the same order as the destinations. It defaults to 1
 
     -f, --line-factor <LINE_FACTOR>
             A factor to multiply the grouping size of the distribution [default: 1]
