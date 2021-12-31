@@ -11,6 +11,7 @@ documentation = "https://docs.rs/crate/zsplit"
 description = "Split text into multiple files"
 keywords = ["split", "text", "coreutils", "cli", "utility"]
 categories = ["command-line-utilities"]
+exclude = ["/scripts", "*.drawio"]
 
 [profile.release]
 lto = "thin"
