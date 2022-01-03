@@ -1,21 +1,19 @@
 use assert_cmd::Command;
 use assert_fs::prelude::*;
 use assert_fs::NamedTempFile;
+use itertools::Itertools;
 use std::fs::read_to_string;
 use std::path::Path;
 
 fn seq(from: isize, to: isize, step_width: usize) -> String {
-    (from..=to)
-        .step_by(step_width)
-        .map(|i| i.to_string() + "\n")
-        .collect()
+    (from..=to).step_by(step_width).join("\n") + "\n"
 }
 
 fn seq_ring(from: isize, to: isize, modulo: isize, reminders: &[isize]) -> String {
     (from..=to)
         .filter(|i| reminders.iter().any(|reminder| i % modulo == *reminder))
-        .map(|i| i.to_string() + "\n")
-        .collect()
+        .join("\n")
+        + "\n"
 }
 
 fn outputs(prefix: &str, count: usize) -> Vec<NamedTempFile> {

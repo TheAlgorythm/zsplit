@@ -750,5 +750,6 @@ dependencies = [
  "clap",
  "exitcode",
  "human-panic",
+ "itertools",
  "thiserror",
 ]
