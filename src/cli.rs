@@ -1,4 +1,5 @@
 use crate::source::Source;
+use crate::Destination;
 use bool_ext::BoolExt;
 use clap::{Parser, ValueHint};
 use std::num::NonZeroUsize;
@@ -83,10 +84,4 @@ impl Cli {
             .map(|distribution| usize::from(*distribution))
             .unwrap_or(1)
     }
-}
-
-#[derive(Debug)]
-pub struct Destination {
-    pub assigned_lines: usize,
-    pub file: PathBuf,
 }

@@ -1,4 +1,4 @@
-use crate::cli::Destination;
+use crate::Destination;
 use io::{BufRead, BufWriter, Write};
 use std::cell::RefCell;
 use std::collections::HashMap;
