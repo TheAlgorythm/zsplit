@@ -70,17 +70,25 @@ impl Cli {
         Ok(())
     }
 
-    pub fn destinations(&self) -> Result<Vec<Destination<BufWriter<File>>>, io::Error> {
+    fn destinations_raw<W, M>(&self, map: M) -> Result<Vec<Destination<W>>, io::Error>
+    where
+        W: io::Write,
+        M: Fn(PathBuf, usize) -> Result<Destination<W>, io::Error>,
+    {
         self.destinations
             .iter()
             .enumerate()
             .map(|(index, file)| {
-                Destination::from_path(
+                (map)(
                     file.clone(),
                     usize::from(self.line_factor) * self.get_distribution(index),
                 )
             })
             .collect()
+    }
+
+    pub fn destinations(&self) -> Result<Vec<Destination<BufWriter<File>>>, io::Error> {
+        self.destinations_raw(Destination::from_path)
     }
 
     fn get_distribution(&self, index: usize) -> usize {

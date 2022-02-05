@@ -1,5 +1,11 @@
 use super::*;
 
+impl Destination<io::Sink> {
+    pub fn sink_file(_path: PathBuf, assigned_lines: usize) -> Result<Self, io::Error> {
+        Ok(Self::new(io::sink(), assigned_lines))
+    }
+}
+
 pub struct IdSink {
     id: u64,
     sink: io::Sink,
