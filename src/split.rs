@@ -1,3 +1,5 @@
+//! Algorithms for splitting a source into destination sinks.
+
 use crate::Destination;
 use io::{BufRead, Write};
 use std::cell::RefCell;
@@ -7,6 +9,20 @@ use std::io;
 #[path = "./split_test.rs"]
 mod split_test;
 
+/// Splits the `source` round robin like into `destinations`.
+///
+/// ```rust
+/// use zsplit::prelude::*;
+///
+/// let data = "Hello\nWorld,\n42!";
+/// let mut source = std::io::BufReader::new(data.as_bytes());
+/// let destinations = [
+///     Destination::new_sink(std::io::sink()),
+///     Destination::new_sink(std::io::sink()),
+/// ];
+///
+/// split_round_robin(&mut source, &destinations).unwrap();
+/// ```
 pub fn split_round_robin<W: Write>(
     source: &mut dyn BufRead,
     destinations: &[Destination<W>],

@@ -4,7 +4,7 @@
 [![Crates.io](https://img.shields.io/crates/v/zsplit?style=for-the-badge&logo=rust)](https://crates.io/crates/zsplit)
 [![crev reviews](https://web.crev.dev/rust-reviews/badge/crev_count/zsplit.svg)](https://web.crev.dev/rust-reviews/crate/zsplit/)
 
-Split text into multiple files.
+Split text into multiple files by line.
 
 ## Usage
 
@@ -12,7 +12,7 @@ Split text into multiple files.
 $ zsplit --help
 zsplit 0.2.1
 ZSchoen <dev@zschoen.dev>
-Split text into multiple files
+Split text into multiple files by line
 
 USAGE:
     zsplit [OPTIONS] <SOURCE> <DESTINATIONS>...

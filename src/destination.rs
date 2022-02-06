@@ -21,6 +21,12 @@ impl<W: Write> Destination<W> {
             assigned_lines,
         }
     }
+    pub fn new_sink(sink: W) -> Self {
+        Self {
+            sink: RefCell::new(sink),
+            assigned_lines: 1,
+        }
+    }
 }
 
 impl Destination<BufWriter<File>> {
