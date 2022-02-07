@@ -17,8 +17,8 @@ mod split_test;
 /// let data = "Hello\nWorld,\n42!";
 /// let mut source = std::io::BufReader::new(data.as_bytes());
 /// let destinations = [
-///     Destination::new_sink(std::io::sink()),
-///     Destination::new_sink(std::io::sink()),
+///     Destination::new_with_sink(std::io::sink()),
+///     Destination::new_with_sink(std::io::sink()),
 /// ];
 ///
 /// split_round_robin(&mut source, &destinations).unwrap();

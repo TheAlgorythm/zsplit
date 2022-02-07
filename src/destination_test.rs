@@ -1,8 +1,14 @@
 use super::*;
 
-impl Destination<io::Sink> {
-    pub fn sink_file(_path: PathBuf, assigned_lines: usize) -> Result<Self, io::Error> {
-        Ok(Self::new(io::sink(), assigned_lines))
+impl SinkFromPath for Destination<io::Sink> {
+    type Sink = io::Sink;
+
+    fn create_sink<P: AsRef<Path>>(path: P) -> Result<Self::Sink, io::Error> {
+        path.as_ref()
+            .to_str()
+            .ok_or_else(|| io::Error::new(io::ErrorKind::NotFound, ""))?;
+
+        Ok(io::sink())
     }
 }
 

@@ -6,7 +6,7 @@
 //!
 //! - `cli-app`
 //!   - Disabled by default.
-//!   - Used for the identically named CLI application
+//!   - Used by the identically named CLI application
 //!
 //! ## Examples
 //!
@@ -19,7 +19,7 @@
 //! let destinations = [
 //!     Destination::new(std::io::sink(), 3),
 //!     Destination::new(std::io::sink(), 2),
-//!     Destination::new_sink(std::io::sink()),
+//!     Destination::new_with_sink(std::io::sink()),
 //! ];
 //!
 //! split_round_robin(&mut source, &destinations).unwrap();
@@ -36,9 +36,10 @@
 //!
 //! let mut child_1 = Command::new("cat").arg("-").stdin(Stdio::piped()).spawn().unwrap();
 //! let mut child_2 = Command::new("cat").arg("-").stdin(Stdio::piped()).spawn().unwrap();
+//!
 //! let destinations = [
-//!     Destination::new_sink(child_1.stdin.take().unwrap()),
-//!     Destination::new_sink(child_2.stdin.take().unwrap()),
+//!     Destination::new_with_sink(child_1.stdin.take().unwrap()),
+//!     Destination::new_with_sink(child_2.stdin.take().unwrap()),
 //! ];
 //!
 //! split_round_robin(&mut source, &destinations).unwrap();

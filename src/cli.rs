@@ -2,8 +2,6 @@ use crate::source::Source;
 use crate::Destination;
 use bool_ext::BoolExt;
 use clap::{Parser, ValueHint};
-use io::BufWriter;
-use std::fs::File;
 use std::io;
 use std::num::NonZeroUsize;
 use std::path::PathBuf;
@@ -70,25 +68,19 @@ impl Cli {
         Ok(())
     }
 
-    fn destinations_raw<W, M>(&self, map: M) -> Result<Vec<Destination<W>>, io::Error>
-    where
-        W: io::Write,
-        M: Fn(PathBuf, usize) -> Result<Destination<W>, io::Error>,
-    {
+    pub fn destinations(
+        &self,
+    ) -> Result<Vec<Destination<impl io::Write + std::fmt::Debug>>, io::Error> {
         self.destinations
             .iter()
             .enumerate()
             .map(|(index, file)| {
-                (map)(
+                Destination::new_with_path_and_lines(
                     file.clone(),
                     usize::from(self.line_factor) * self.get_distribution(index),
                 )
             })
             .collect()
-    }
-
-    pub fn destinations(&self) -> Result<Vec<Destination<BufWriter<File>>>, io::Error> {
-        self.destinations_raw(Destination::from_path)
     }
 
     fn get_distribution(&self, index: usize) -> usize {
