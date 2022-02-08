@@ -24,13 +24,13 @@
 //! let data = "Hello\nWorld,\n42!";
 //! let mut source = std::io::BufReader::new(data.as_bytes());
 //!
-//! let destinations = [
+//! let mut destinations = [
 //!     Destination::new(std::io::sink(), 3),
 //!     Destination::new(std::io::sink(), 2),
 //!     Destination::new_with_sink(std::io::sink()),
 //! ];
 //!
-//! split_round_robin(&mut source, &destinations).unwrap();
+//! split_round_robin(&mut source, &mut destinations).unwrap();
 //! ```
 //!
 //! To split the data for the `STDIN` of multiple processes, you can use the following scheme.
@@ -45,12 +45,12 @@
 //! let mut child_1 = Command::new("cat").arg("-").stdin(Stdio::piped()).spawn().unwrap();
 //! let mut child_2 = Command::new("cat").arg("-").stdin(Stdio::piped()).spawn().unwrap();
 //!
-//! let destinations = [
+//! let mut destinations = [
 //!     Destination::new_with_sink(child_1.stdin.take().unwrap()),
 //!     Destination::new_with_sink(child_2.stdin.take().unwrap()),
 //! ];
 //!
-//! split_round_robin(&mut source, &destinations).unwrap();
+//! split_round_robin(&mut source, &mut destinations).unwrap();
 //!
 //! child_1.kill().unwrap();
 //! child_2.kill().unwrap();

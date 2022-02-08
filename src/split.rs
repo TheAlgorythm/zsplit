@@ -2,7 +2,6 @@
 
 use crate::Destination;
 use io::{BufRead, Write};
-use std::cell::RefCell;
 use std::io;
 
 #[cfg(test)]
@@ -20,12 +19,12 @@ mod split_test;
 ///
 /// let data = "Hello\nWorld,\n42!";
 /// let mut source = std::io::BufReader::new(data.as_bytes());
-/// let destinations = [
+/// let mut destinations = [
 ///     Destination::new_with_sink(std::io::sink()),
 ///     Destination::new_with_sink(std::io::sink()),
 /// ];
 ///
-/// split_round_robin(&mut source, &destinations).unwrap();
+/// split_round_robin(&mut source, &mut destinations).unwrap();
 /// ```
 ///
 /// Split Text:
@@ -40,7 +39,7 @@ mod split_test;
 ///     Destination::buffer(), // second_destination
 /// ];
 ///
-/// split_round_robin(&mut source, &destinations).unwrap();
+/// split_round_robin(&mut source, &mut destinations).unwrap();
 ///
 /// let second_destination = destinations.pop().unwrap();
 /// let first_destination = destinations.pop().unwrap();
@@ -48,47 +47,53 @@ mod split_test;
 /// assert_eq!(first_destination.into_utf8_string().unwrap(), "Hello\n42!\n");
 /// assert_eq!(second_destination.into_utf8_string().unwrap(), "World,\n");
 /// ```
-pub fn split_round_robin<W: Write>(
+pub fn split_round_robin<S: Write>(
     source: &mut dyn BufRead,
-    destinations: &[Destination<W>],
-) -> Result<(), io::Error> {
-    let mapped_line_destinations = map_line_destinations(destinations);
+    destinations: &mut [Destination<S>],
+) -> io::Result<()> {
+    let mapped_line_destinations = round_robin::map_line_destinations(destinations);
 
-    write_lines(source, &mapped_line_destinations)?;
+    round_robin::write_lines(source, destinations, &mapped_line_destinations)?;
 
     flush_buffers(destinations)?;
 
     Ok(())
 }
 
-fn map_line_destinations<W: Write>(destinations: &[Destination<W>]) -> Vec<&RefCell<W>> {
-    destinations
-        .iter()
-        .map(|destination| std::iter::repeat(&destination.sink).take(destination.assigned_lines))
-        .flatten()
-        .collect()
+mod round_robin {
+    use crate::Destination;
+    use io::{BufRead, Write};
+    use std::io;
+
+    pub fn map_line_destinations<S: Write>(destinations: &[Destination<S>]) -> Vec<usize> {
+        destinations
+            .iter()
+            .enumerate()
+            .map(|(index, destination)| std::iter::repeat(index).take(destination.assigned_lines))
+            .flatten()
+            .collect()
+    }
+
+    pub fn write_lines<S: Write>(
+        source: &mut dyn BufRead,
+        destinations: &mut [Destination<S>],
+        mapped_line_destinations: &[usize],
+    ) -> io::Result<()> {
+        let line_ring_size = mapped_line_destinations.len();
+
+        source
+            .lines()
+            .enumerate()
+            .try_for_each(|(line_index, line)| {
+                let line_index = line_index % line_ring_size;
+
+                let sink = &mut destinations[mapped_line_destinations[line_index]];
+
+                writeln!(sink, "{}", line?)
+            })
+    }
 }
 
-fn write_lines<W: Write>(
-    source: &mut dyn BufRead,
-    mapped_line_destinations: &[&RefCell<W>],
-) -> Result<(), io::Error> {
-    let line_ring_size = mapped_line_destinations.len();
-
-    source
-        .lines()
-        .enumerate()
-        .try_for_each(|(line_index, line)| {
-            let line_index = line_index % line_ring_size;
-
-            let mut sink = mapped_line_destinations[line_index].borrow_mut();
-
-            writeln!(sink, "{}", line?)
-        })
-}
-
-fn flush_buffers<W: Write>(destinations: &[Destination<W>]) -> Result<(), io::Error> {
-    destinations
-        .iter()
-        .try_for_each(|destination| destination.sink.borrow_mut().flush())
+fn flush_buffers<S: Write>(destinations: &mut [Destination<S>]) -> io::Result<()> {
+    destinations.iter_mut().try_for_each(Destination::flush)
 }

@@ -3,7 +3,6 @@
 #[cfg(not(test))]
 use io::BufWriter;
 use io::Write;
-use std::cell::RefCell;
 #[cfg(not(test))]
 use std::fs::File;
 use std::io;
@@ -22,7 +21,7 @@ pub struct Destination<S: Write> {
     pub assigned_lines: usize,
 
     /// Where the splitting operation writes data to.
-    pub sink: RefCell<S>,
+    pub sink: S,
 }
 
 impl<S: Write> Destination<S> {
@@ -40,7 +39,7 @@ impl<S: Write> Destination<S> {
     #[inline]
     pub fn new(sink: S, assigned_lines: usize) -> Self {
         Self {
-            sink: RefCell::new(sink),
+            sink: sink,
             assigned_lines,
         }
     }
@@ -60,7 +59,7 @@ impl<S: Write> Destination<S> {
     #[inline]
     pub fn new_with_sink(sink: S) -> Self {
         Self {
-            sink: RefCell::new(sink),
+            sink: sink,
             assigned_lines: 1,
         }
     }
@@ -80,7 +79,7 @@ impl<S: Write> Destination<S> {
     /// ```
     #[inline]
     pub fn into_sink(self) -> S {
-        self.sink.into_inner()
+        self.sink
     }
 }
 
@@ -137,8 +136,8 @@ impl Destination<Vec<u8>> {
     /// use zsplit::prelude::*;
     /// use std::io::Write;
     ///
-    /// let destination = Destination::buffer();
-    /// destination.sink.borrow_mut().write(&[240, 159, 146, 150]);
+    /// let mut destination = Destination::buffer();
+    /// destination.write(&[240, 159, 146, 150]);
     ///
     /// let string = destination.into_utf8_string().unwrap();
     ///
@@ -151,8 +150,8 @@ impl Destination<Vec<u8>> {
     /// use zsplit::prelude::*;
     /// use std::io::Write;
     ///
-    /// let destination = Destination::buffer();
-    /// destination.sink.borrow_mut().write(&[0, 159, 146, 150]);
+    /// let mut destination = Destination::buffer();
+    /// destination.write(&[0, 159, 146, 150]);
     ///
     /// assert!(destination.into_utf8_string().is_err());
     /// ```
@@ -192,7 +191,7 @@ where
     ///
     /// assert!(Destination::new_with_path(".").is_err());
     /// ```
-    pub fn new_with_path<P: AsRef<Path>>(path: P) -> Result<Self, io::Error> {
+    pub fn new_with_path<P: AsRef<Path>>(path: P) -> io::Result<Self> {
         let sink = Self::create_sink(path)?;
 
         Ok(Self::new_with_sink(sink))
@@ -218,7 +217,7 @@ where
     pub fn new_with_path_and_lines<P: AsRef<Path>>(
         path: P,
         assigned_lines: usize,
-    ) -> Result<Self, io::Error> {
+    ) -> io::Result<Self> {
         let sink = Self::create_sink(path)?;
 
         Ok(Self::new(sink, assigned_lines))
@@ -228,14 +227,25 @@ where
 #[doc(hidden)]
 pub trait SinkFromPath {
     type Sink: Write;
-    fn create_sink<P: AsRef<Path>>(path: P) -> Result<Self::Sink, io::Error>;
+    fn create_sink<P: AsRef<Path>>(path: P) -> io::Result<Self::Sink>;
 }
 
 #[cfg(not(test))]
 impl SinkFromPath for Destination<BufWriter<File>> {
     type Sink = BufWriter<File>;
     #[inline]
-    fn create_sink<P: AsRef<Path>>(path: P) -> Result<Self::Sink, io::Error> {
+    fn create_sink<P: AsRef<Path>>(path: P) -> io::Result<Self::Sink> {
         File::create(path).map(BufWriter::new)
+    }
+}
+
+impl<S: Write> Write for Destination<S> {
+    #[inline]
+    fn write(&mut self, buf: &[u8]) -> io::Result<usize> {
+        self.sink.write(buf)
+    }
+    #[inline]
+    fn flush(&mut self) -> io::Result<()> {
+        self.sink.flush()
     }
 }

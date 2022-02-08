@@ -27,7 +27,7 @@ fn main() {
         }
     };
 
-    let destinations = match cli.destinations() {
+    let mut destinations = match cli.destinations() {
         Ok(destinations) => destinations,
         Err(error) => {
             eprintln!("Error: {}", error);
@@ -39,7 +39,7 @@ fn main() {
         }
     };
 
-    if let Err(error) = split_round_robin(&mut source, &destinations) {
+    if let Err(error) = split_round_robin(&mut source, &mut destinations) {
         eprintln!("Error: {}", error);
         let code = match error.kind() {
             ErrorKind::PermissionDenied => exitcode::NOPERM,

@@ -68,9 +68,7 @@ impl Cli {
         Ok(())
     }
 
-    pub fn destinations(
-        &self,
-    ) -> Result<Vec<Destination<impl io::Write + std::fmt::Debug>>, io::Error> {
+    pub fn destinations(&self) -> io::Result<Vec<Destination<impl io::Write + std::fmt::Debug>>> {
         self.destinations
             .iter()
             .enumerate()

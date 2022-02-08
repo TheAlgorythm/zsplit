@@ -3,7 +3,7 @@ use super::*;
 impl SinkFromPath for Destination<io::Sink> {
     type Sink = io::Sink;
 
-    fn create_sink<P: AsRef<Path>>(path: P) -> Result<Self::Sink, io::Error> {
+    fn create_sink<P: AsRef<Path>>(path: P) -> io::Result<Self::Sink> {
         path.as_ref()
             .to_str()
             .ok_or_else(|| io::Error::new(io::ErrorKind::NotFound, ""))?;

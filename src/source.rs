@@ -14,7 +14,7 @@ pub enum Source {
 }
 
 impl Source {
-    pub fn reading_buffer(&self) -> Result<Box<dyn BufRead>, io::Error> {
+    pub fn reading_buffer(&self) -> io::Result<Box<dyn BufRead>> {
         match self {
             Self::PathBuf(current_file) => Ok(Box::new(BufReader::new(File::open(current_file)?))),
             Self::StdIn => {
