@@ -1,14 +1,22 @@
 //! Split text into multiple sinks by line.
 //!
-//! This crate could be used to send input to multiple threads via [`channel_io`](https://lib.rs/crates/channel_io) or send it to the `STDIN` of multiple [`std::process::Command`]s.
+//! This crate could be used to send input to multiple threads via [`channel_io`](https://lib.rs/crates/channel_io)
+//! or send it to the `STDIN` of multiple [`std::process::Command`]s.
 //!
-//! ## Crate Features
+//! # Crate Features
 //!
 //! - `cli-app`
 //!   - Disabled by default.
 //!   - Used by the identically named CLI application
 //!
-//! ## Examples
+//! # Warnings
+//!
+//! As a line of [`std::io::BufReader`] has to be completely in memory, an unbounded long line
+//! could lead to a DoS vulnerability.
+//!
+//! # Examples
+//!
+//! Basic usage:
 //!
 //! ```rust
 //! use zsplit::prelude::*;

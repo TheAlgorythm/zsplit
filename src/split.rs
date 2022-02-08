@@ -11,6 +11,10 @@ mod split_test;
 
 /// Splits the `source` round robin like into `destinations`.
 ///
+/// # Examples
+///
+/// Basic usage:
+///
 /// ```rust
 /// use zsplit::prelude::*;
 ///
@@ -22,6 +26,27 @@ mod split_test;
 /// ];
 ///
 /// split_round_robin(&mut source, &destinations).unwrap();
+/// ```
+///
+/// Split Text:
+///
+/// ```rust
+/// use zsplit::prelude::*;
+///
+/// let data = "Hello\nWorld,\n42!";
+/// let mut source = std::io::BufReader::new(data.as_bytes());
+/// let mut destinations = vec![
+///     Destination::buffer(), // first_destination
+///     Destination::buffer(), // second_destination
+/// ];
+///
+/// split_round_robin(&mut source, &destinations).unwrap();
+///
+/// let second_destination = destinations.pop().unwrap();
+/// let first_destination = destinations.pop().unwrap();
+///
+/// assert_eq!(first_destination.into_utf8_string().unwrap(), "Hello\n42!\n");
+/// assert_eq!(second_destination.into_utf8_string().unwrap(), "World,\n");
 /// ```
 pub fn split_round_robin<W: Write>(
     source: &mut dyn BufRead,
