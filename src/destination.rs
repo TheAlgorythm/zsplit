@@ -39,7 +39,7 @@ impl<S: Write> Destination<S> {
     #[inline]
     pub fn new(sink: S, assigned_lines: usize) -> Self {
         Self {
-            sink: sink,
+            sink,
             assigned_lines,
         }
     }
@@ -59,7 +59,7 @@ impl<S: Write> Destination<S> {
     #[inline]
     pub fn new_with_sink(sink: S) -> Self {
         Self {
-            sink: sink,
+            sink,
             assigned_lines: 1,
         }
     }
