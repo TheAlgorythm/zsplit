@@ -65,6 +65,13 @@ mod round_robin {
     use io::{BufRead, Write};
     use std::io;
 
+    /// Maps a [`Destination`] with the line number.
+    ///
+    /// The output represents:
+    ///
+    /// ```ignore
+    /// mapped_line_destinations[line % mapped_line_destinations.len()] -> index(destination)
+    /// ```
     pub fn map_line_destinations<S: Write>(destinations: &[Destination<S>]) -> Vec<usize> {
         destinations
             .iter()
