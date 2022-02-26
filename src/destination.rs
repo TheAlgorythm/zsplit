@@ -177,7 +177,7 @@ where
     ///
     /// Basic usage:
     ///
-    /// ```ignore
+    /// ```no_run
     /// use zsplit::prelude::*;
     ///
     /// let destination = Destination::new_with_path("a.txt").unwrap();
@@ -186,7 +186,7 @@ where
     ///
     /// Invalid [`Path`]:
     ///
-    /// ```ignore
+    /// ```
     /// use zsplit::prelude::*;
     ///
     /// assert!(Destination::new_with_path(".").is_err());
@@ -209,7 +209,7 @@ where
     ///
     /// Basic usage:
     ///
-    /// ```ignore
+    /// ```no_run
     /// use zsplit::prelude::*;
     ///
     /// Destination::new_with_path_and_lines("a.txt", 42).unwrap();

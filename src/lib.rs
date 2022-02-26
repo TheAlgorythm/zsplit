@@ -35,7 +35,7 @@
 //!
 //! To split the data for the `STDIN` of multiple processes, you can use the following scheme.
 //!
-//! ```ignore
+//! ```no_run
 //! use zsplit::prelude::*;
 //! use std::process::{Command, Stdio};
 //!

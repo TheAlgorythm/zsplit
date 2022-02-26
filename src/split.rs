@@ -60,6 +60,7 @@ pub fn split_round_robin<S: Write>(
     Ok(())
 }
 
+/// Round Robin specific algorithms.
 mod round_robin {
     use crate::Destination;
     use io::{BufRead, Write};
@@ -69,7 +70,7 @@ mod round_robin {
     ///
     /// The output represents:
     ///
-    /// ```ignore
+    /// ```plain
     /// mapped_line_destinations[line % mapped_line_destinations.len()] -> index(destination)
     /// ```
     pub fn map_line_destinations<S: Write>(destinations: &[Destination<S>]) -> Vec<usize> {
