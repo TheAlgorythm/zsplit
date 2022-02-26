@@ -61,6 +61,7 @@
 #![warn(clippy::wildcard_imports)]
 #![warn(clippy::clone_on_ref_ptr)]
 #![warn(clippy::cognitive_complexity)]
+#![warn(clippy::disallowed_types)]
 
 #[cfg(feature = "cli-app")]
 pub mod cli;

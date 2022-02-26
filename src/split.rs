@@ -77,8 +77,9 @@ mod round_robin {
         destinations
             .iter()
             .enumerate()
-            .map(|(index, destination)| std::iter::repeat(index).take(destination.assigned_lines))
-            .flatten()
+            .flat_map(|(index, destination)| {
+                std::iter::repeat(index).take(destination.assigned_lines)
+            })
             .collect()
     }
 
