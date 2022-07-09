@@ -1,77 +1,43 @@
 use super::*;
-use std::path::PathBuf;
+mod round_robin {
+    use super::*;
+    use crate::destination::destination_test::IdSink;
+    use crate::split::round_robin::*;
 
-#[test]
-fn simple_map_line_buffers() {
-    let destinations = [
-        Destination {
-            file: PathBuf::new(),
-            assigned_lines: 1,
-        },
-        Destination {
-            file: PathBuf::new(),
-            assigned_lines: 2,
-        },
-        Destination {
-            file: PathBuf::new(),
-            assigned_lines: 3,
-        },
-    ];
+    #[test]
+    fn simple_map_line_destinations() {
+        let destinations = [
+            Destination::new(IdSink::new(0), 1),
+            Destination::new(IdSink::new(1), 2),
+            Destination::new(IdSink::new(2), 3),
+        ];
 
-    let mock_buffers = [0, 1, 2];
+        let mapped_line_destinations = map_line_destinations(&destinations);
 
-    let mapped_line_buffers = map_line_buffers(&destinations, &mock_buffers);
+        assert_eq!(
+            mapped_line_destinations.len(),
+            destinations.iter().map(|new| new.assigned_lines).sum()
+        );
 
-    assert_eq!(
-        mapped_line_buffers.len(),
-        destinations.iter().map(|new| new.assigned_lines).sum()
-    );
+        assert_eq!(mapped_line_destinations[0], 0);
+        (1..=2).for_each(|index| assert_eq!(mapped_line_destinations[index], 1));
+        (3..=5).for_each(|index| assert_eq!(mapped_line_destinations[index], 2));
+    }
 
-    assert_eq!(*mapped_line_buffers[&0], 0);
-    (1..=2).for_each(|index| assert_eq!(*mapped_line_buffers[&index], 1));
-    (3..=5).for_each(|index| assert_eq!(*mapped_line_buffers[&index], 2));
-}
+    #[test]
+    fn empty_assigned_lines_map_line_destinations() {
+        let destinations = [
+            Destination::new(IdSink::new(0), 0),
+            Destination::new(IdSink::new(1), 1),
+        ];
 
-#[test]
-#[should_panic]
-fn unsymmetric_map_line_buffers() {
-    let destinations = [
-        Destination {
-            file: PathBuf::new(),
-            assigned_lines: 1,
-        },
-        Destination {
-            file: PathBuf::new(),
-            assigned_lines: 1,
-        },
-    ];
+        let mapped_line_destinations = map_line_destinations(&destinations);
 
-    let mock_buffers = [0];
+        assert_eq!(
+            mapped_line_destinations.len(),
+            destinations.iter().map(|new| new.assigned_lines).sum()
+        );
 
-    map_line_buffers(&destinations, &mock_buffers);
-}
-
-#[test]
-fn empty_assigned_lines_map_line_buffers() {
-    let destinations = [
-        Destination {
-            file: PathBuf::new(),
-            assigned_lines: 0,
-        },
-        Destination {
-            file: PathBuf::new(),
-            assigned_lines: 1,
-        },
-    ];
-
-    let mock_buffers = [0, 1];
-
-    let mapped_line_buffers = map_line_buffers(&destinations, &mock_buffers);
-
-    assert_eq!(
-        mapped_line_buffers.len(),
-        destinations.iter().map(|new| new.assigned_lines).sum()
-    );
-
-    assert_eq!(*mapped_line_buffers[&0], 1);
+        assert_eq!(mapped_line_destinations[0], 1);
+    }
 }

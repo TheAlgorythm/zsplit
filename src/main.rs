@@ -3,10 +3,12 @@
 #![warn(clippy::wildcard_imports)]
 #![warn(clippy::clone_on_ref_ptr)]
 #![warn(clippy::cognitive_complexity)]
+#![warn(clippy::disallowed_types)]
 
 use clap::Parser;
 use human_panic::setup_panic;
-use zsplit::{split, Cli};
+use std::io::ErrorKind;
+use zsplit::{split_round_robin, Cli};
 
 fn main() {
     setup_panic!();
@@ -26,9 +28,20 @@ fn main() {
         }
     };
 
-    if let Err(error) = split(&mut source, &cli.destinations()) {
+    let mut destinations = match cli.destinations() {
+        Ok(destinations) => destinations,
+        Err(error) => {
+            eprintln!("Error: {}", error);
+            let code = match error.kind() {
+                ErrorKind::PermissionDenied => exitcode::NOPERM,
+                _ => exitcode::IOERR,
+            };
+            std::process::exit(code);
+        }
+    };
+
+    if let Err(error) = split_round_robin(&mut source, &mut destinations) {
         eprintln!("Error: {}", error);
-        use std::io::ErrorKind;
         let code = match error.kind() {
             ErrorKind::PermissionDenied => exitcode::NOPERM,
             ErrorKind::AlreadyExists => exitcode::CANTCREAT,
