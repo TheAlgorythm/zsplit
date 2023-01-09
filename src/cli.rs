@@ -2,6 +2,7 @@ use crate::source::Source;
 use crate::Destination;
 use bool_ext::BoolExt;
 use clap::{Parser, ValueHint};
+use std::io;
 use std::num::NonZeroUsize;
 use std::path::PathBuf;
 use thiserror::Error;
@@ -67,13 +68,15 @@ impl Cli {
         Ok(())
     }
 
-    pub fn destinations(&self) -> Vec<Destination> {
+    pub fn destinations(&self) -> io::Result<Vec<Destination<impl io::Write + std::fmt::Debug>>> {
         self.destinations
             .iter()
             .enumerate()
-            .map(|(index, file)| Destination {
-                file: file.clone(),
-                assigned_lines: usize::from(self.line_factor) * self.get_distribution(index),
+            .map(|(index, file)| {
+                Destination::new_with_path_and_lines(
+                    file.clone(),
+                    usize::from(self.line_factor) * self.get_distribution(index),
+                )
             })
             .collect()
     }

@@ -64,7 +64,7 @@ fn invalid_more_distributions_than_destinations() {
 
 #[test]
 fn default_distribution() {
-    let destinations = empty_cli().destinations();
+    let destinations = empty_cli().destinations().unwrap();
 
     assert_eq!(destinations.len(), 3);
     assert!(destinations
@@ -77,7 +77,7 @@ fn default_distribution_with_line_factor() {
     let mut cli = empty_cli();
     cli.line_factor = non_zero_usize(2);
 
-    let destinations = cli.destinations();
+    let destinations = cli.destinations().unwrap();
 
     assert_eq!(destinations.len(), 3);
     assert!(destinations
@@ -90,7 +90,7 @@ fn partial_distribution() {
     let mut cli = empty_cli();
     cli.distributions = vec![non_zero_usize(3), non_zero_usize(3)];
 
-    let destinations = cli.destinations();
+    let destinations = cli.destinations().unwrap();
 
     assert_eq!(destinations.len(), 3);
     assert_eq!(destinations[0].assigned_lines, 3);
@@ -104,10 +104,20 @@ fn partial_distribution_with_line_factor() {
     cli.distributions = vec![non_zero_usize(3), non_zero_usize(3)];
     cli.line_factor = non_zero_usize(2);
 
-    let destinations = cli.destinations();
+    let destinations = cli.destinations().unwrap();
 
     assert_eq!(destinations.len(), 3);
     assert_eq!(destinations[0].assigned_lines, 6);
     assert_eq!(destinations[1].assigned_lines, 6);
     assert_eq!(destinations[2].assigned_lines, 2);
+}
+
+#[cfg(any(unix, target_os = "redox"))]
+#[test]
+fn error_during_sink_creation() {
+    use std::os::unix::ffi::OsStrExt;
+    let mut cli = empty_cli();
+    cli.destinations[0] = std::ffi::OsStr::from_bytes(&[0x66, 0x6f, 0x80, 0x6f]).into();
+
+    cli.destinations().unwrap_err();
 }
