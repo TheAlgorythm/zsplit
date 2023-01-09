@@ -5,10 +5,14 @@
 #![warn(clippy::cognitive_complexity)]
 #![warn(clippy::disallowed_types)]
 
+mod cli;
+mod source;
+
 use clap::Parser;
+use cli::Cli;
 use human_panic::setup_panic;
 use std::io::ErrorKind;
-use zsplit::{split_round_robin, Cli};
+use zsplit::split_round_robin;
 
 fn main() {
     setup_panic!();

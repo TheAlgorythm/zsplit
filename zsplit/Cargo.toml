@@ -1,0 +1,18 @@
+[package]
+name = "zsplit"
+version = "0.2.1"
+authors = ["ZSchoen <dev@zschoen.dev>"]
+edition = "2018"
+license = "GPL-3.0-or-later"
+readme = "README.md"
+homepage = "https://zschoen.dev/projects/zsplit"
+repository = "https://github.com/TheAlgorythm/zsplit"
+documentation = "https://docs.rs/crate/zsplit"
+description = "Split text into multiple files by line"
+keywords = ["split", "text", "coreutils", "cli", "utility"]
+categories = ["command-line-utilities"]
+exclude = ["/scripts", "*.drawio"]
+
+[features]
+default = []
+test_mock = []

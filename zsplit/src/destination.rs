@@ -8,7 +8,7 @@ use std::fs::File;
 use std::io;
 use std::path::Path;
 
-#[cfg(test)]
+#[cfg(any(test, feature = "test_mock"))]
 #[path = "./destination_test.rs"]
 pub mod destination_test;
 
@@ -230,7 +230,7 @@ pub trait SinkFromPath {
     fn create_sink<P: AsRef<Path>>(path: P) -> io::Result<Self::Sink>;
 }
 
-#[cfg(not(test))]
+#[cfg(not(any(test, feature = "test_mock")))]
 impl SinkFromPath for Destination<BufWriter<File>> {
     type Sink = BufWriter<File>;
     #[inline]

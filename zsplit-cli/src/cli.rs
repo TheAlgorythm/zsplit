@@ -1,11 +1,11 @@
 use crate::source::Source;
-use crate::Destination;
 use bool_ext::BoolExt;
 use clap::{Parser, ValueHint};
 use std::io;
 use std::num::NonZeroUsize;
 use std::path::PathBuf;
 use thiserror::Error;
+use zsplit::Destination;
 
 #[cfg(test)]
 #[path = "./cli_test.rs"]
