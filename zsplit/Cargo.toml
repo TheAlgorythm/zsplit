@@ -1,6 +1,6 @@
 [package]
 name = "zsplit"
-version = "0.3.0-rc3"
+version = "0.3.0"
 edition = "2018"
 license = "LGPL-3.0-or-later"
 authors.workspace = true

@@ -11,7 +11,7 @@ Split text into multiple files by line.
 
 ```console
 $ zsplit --help
-zsplit 0.2.1
+zsplit 0.3.0
 ZSchoen <dev@zschoen.dev>
 Split text into multiple files by line
 

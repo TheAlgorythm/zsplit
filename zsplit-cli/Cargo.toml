@@ -1,6 +1,6 @@
 [package]
 name = "zsplit-cli"
-version = "0.3.0-rc3"
+version = "0.3.0"
 edition = "2018"
 license = "GPL-3.0-or-later"
 authors.workspace = true
@@ -19,7 +19,7 @@ path = "src/main.rs"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-zsplit = "0.3.0-rc3"
+zsplit = "0.3"
 # zsplit.path = "../zsplit"
 clap = { version = "3.0.0", features = ["derive"] }
 thiserror = "1.0"
