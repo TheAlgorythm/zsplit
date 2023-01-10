@@ -122,7 +122,7 @@ $ cat test_folder/c
 ### Cargo
 
 ```console
-$ cargo install zsplit
+$ cargo install zsplit-cli
 ```
 
 ## CREV - Rust code reviews - Raise awareness
