@@ -11,42 +11,27 @@ mod source;
 use clap::Parser;
 use cli::Cli;
 use human_panic::setup_panic;
-use std::io::ErrorKind;
+use std::convert::TryInto;
+use std::io;
 use zsplit::split_round_robin;
 
-fn main() {
-    setup_panic!();
+fn write_map_err<T, E: std::fmt::Display>(
+    res: Result<T, E>,
+    code: exitcode::ExitCode,
+) -> Result<T, std::process::ExitCode> {
+    let code: u8 = code.try_into().unwrap();
+    res.map_err(|e| {
+        eprintln!("Error: {}", e);
+        code.into()
+    })
+}
 
-    let cli = Cli::parse();
+fn write_map_io_err<T>(res: io::Result<T>) -> Result<T, std::process::ExitCode> {
+    res.map_err(|e| {
+        eprintln!("Error: {}", e);
 
-    if let Err(error) = cli.validate() {
-        eprintln!("Error: {}", error);
-        std::process::exit(exitcode::USAGE);
-    }
-
-    let mut source = match cli.source.reading_buffer() {
-        Ok(source) => source,
-        Err(error) => {
-            eprintln!("Error: {}", error);
-            std::process::exit(exitcode::NOINPUT);
-        }
-    };
-
-    let mut destinations = match cli.destinations() {
-        Ok(destinations) => destinations,
-        Err(error) => {
-            eprintln!("Error: {}", error);
-            let code = match error.kind() {
-                ErrorKind::PermissionDenied => exitcode::NOPERM,
-                _ => exitcode::IOERR,
-            };
-            std::process::exit(code);
-        }
-    };
-
-    if let Err(error) = split_round_robin(&mut source, &mut destinations) {
-        eprintln!("Error: {}", error);
-        let code = match error.kind() {
+        use io::ErrorKind;
+        let code: u8 = match e.kind() {
             ErrorKind::PermissionDenied => exitcode::NOPERM,
             ErrorKind::AlreadyExists => exitcode::CANTCREAT,
             // NOTE Waits for stabilization of rust-lang/rust#86442
@@ -54,7 +39,31 @@ fn main() {
             // | ErrorKind::ReadOnlyFilesystem
             // | ErrorKind::FilenameTooLong => exitcode::CANTCREAT,
             _ => exitcode::IOERR,
-        };
-        std::process::exit(code);
+        }
+        .try_into()
+        .unwrap();
+        code.into()
+    })
+}
+
+fn try_main() -> Result<(), std::process::ExitCode> {
+    let cli = Cli::parse();
+
+    write_map_err(cli.validate(), exitcode::USAGE)?;
+
+    let mut source = write_map_err(cli.source.reading_buffer(), exitcode::NOINPUT)?;
+
+    let mut destinations = write_map_io_err(cli.destinations())?;
+
+    write_map_io_err(split_round_robin(&mut source, &mut destinations))
+}
+
+fn main() -> std::process::ExitCode {
+    setup_panic!();
+
+    if let Err(code) = try_main() {
+        return code;
     }
+
+    std::process::ExitCode::SUCCESS
 }

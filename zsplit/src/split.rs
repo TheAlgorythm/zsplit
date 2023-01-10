@@ -98,8 +98,8 @@ mod round_robin {
 
                 let sink = &mut destinations[mapped_line_destinations[line_index]];
 
-                sink.write(line?.as_bytes())?;
-                sink.write(b"\n")?;
+                sink.write_all(line?.as_bytes())?;
+                sink.write_all(b"\n")?;
                 Ok(())
             })
     }

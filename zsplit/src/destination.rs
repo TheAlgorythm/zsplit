@@ -1,10 +1,6 @@
 //! Destination for splitting.
 
-#[cfg(not(test))]
-use io::BufWriter;
 use io::Write;
-#[cfg(not(test))]
-use std::fs::File;
 use std::io;
 use std::path::Path;
 
@@ -231,11 +227,17 @@ pub trait SinkFromPath {
 }
 
 #[cfg(not(any(test, feature = "test_mock")))]
-impl SinkFromPath for Destination<BufWriter<File>> {
-    type Sink = BufWriter<File>;
-    #[inline]
-    fn create_sink<P: AsRef<Path>>(path: P) -> io::Result<Self::Sink> {
-        File::create(path).map(BufWriter::new)
+mod production {
+    use super::{io, Destination, Path, SinkFromPath};
+    use io::BufWriter;
+    use std::fs::File;
+
+    impl SinkFromPath for Destination<BufWriter<File>> {
+        type Sink = BufWriter<File>;
+        #[inline]
+        fn create_sink<P: AsRef<Path>>(path: P) -> io::Result<Self::Sink> {
+            File::create(path).map(BufWriter::new)
+        }
     }
 }
 

@@ -11,7 +11,7 @@ use zsplit::Destination;
 #[path = "./cli_test.rs"]
 pub mod cli_test;
 
-#[derive(Error, Debug, PartialEq)]
+#[derive(Error, Debug, PartialEq, Eq)]
 pub enum Error {
     #[error("The source is also in destinations.")]
     FileDuplicate,
