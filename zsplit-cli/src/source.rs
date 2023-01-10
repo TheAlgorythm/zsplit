@@ -7,7 +7,7 @@ use std::path::PathBuf;
 #[path = "./source_test.rs"]
 mod source_test;
 
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, Eq)]
 pub enum Source {
     PathBuf(PathBuf),
     StdIn,

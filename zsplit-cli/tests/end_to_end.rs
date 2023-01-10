@@ -33,6 +33,16 @@ fn close(files: Vec<NamedTempFile>) {
         .unwrap()
 }
 
+fn zsplit() -> Command {
+    let runner = escargot::CargoBuild::new()
+        .bin("zsplit")
+        .release()
+        .run()
+        .unwrap();
+
+    Command::from_std(runner.command())
+}
+
 #[test]
 fn simple() {
     let input = NamedTempFile::new("simple_input").unwrap();
@@ -43,8 +53,7 @@ fn simple() {
 
     let outputs = outputs("simple", 4);
 
-    Command::cargo_bin("zsplit")
-        .unwrap()
+    zsplit()
         .arg(input.path())
         .args(&paths(&outputs))
         .assert()
@@ -67,8 +76,7 @@ fn simple_pipe() {
 
     let outputs = outputs("simple_pipe", 4);
 
-    Command::cargo_bin("zsplit")
-        .unwrap()
+    zsplit()
         .write_stdin(seq(0, to, 1))
         .arg("-")
         .args(&paths(&outputs))
@@ -91,8 +99,7 @@ fn unsymmetric_pipe() {
 
     let outputs = outputs("unsymmetric_pipe", 4);
 
-    Command::cargo_bin("zsplit")
-        .unwrap()
+    zsplit()
         .write_stdin(seq(0, to, 1))
         .arg("-")
         .args(&paths(&outputs))
@@ -126,8 +133,7 @@ fn multiple_pipe() {
 
     let outputs = outputs("multiple_pipe", 4);
 
-    Command::cargo_bin("zsplit")
-        .unwrap()
+    zsplit()
         .write_stdin(seq(0, to, 1))
         .arg("-")
         .args(&paths(&outputs))
@@ -161,8 +167,7 @@ fn multiple_unsymmetric_pipe() {
 
     let outputs = outputs("multiple_unsymmetric_pipe", 3);
 
-    Command::cargo_bin("zsplit")
-        .unwrap()
+    zsplit()
         .write_stdin(seq(0, to, 1))
         .arg("-")
         .args(&paths(&outputs))
@@ -193,8 +198,7 @@ fn many_outputs() {
 
     let outputs = outputs("many_outputs", 42);
 
-    Command::cargo_bin("zsplit")
-        .unwrap()
+    zsplit()
         .write_stdin(seq(0, to, 1))
         .arg("-")
         .args(&paths(&outputs))
@@ -216,8 +220,7 @@ fn usage_error() {
     let input = NamedTempFile::new("usage_error_input").unwrap();
     let outputs = outputs("usage_error", 2);
 
-    Command::cargo_bin("zsplit")
-        .unwrap()
+    zsplit()
         .arg(input.path())
         .arg(input.path())
         .args(&paths(&outputs))
