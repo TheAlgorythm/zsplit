@@ -50,4 +50,3 @@ jobs:
         with:
           command: clippy
           args: '-- -D warnings'
-          args: ' --all-features -- -D warnings'
