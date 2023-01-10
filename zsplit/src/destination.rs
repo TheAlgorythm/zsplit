@@ -10,7 +10,7 @@ pub mod destination_test;
 
 /// The `sink` with metadata for the splitting operation.
 ///
-/// For anything  IO bound, like filesystem or network, a [`BufWriter`] is recommended.
+/// For anything  IO bound, like filesystem or network, a [`std::io::BufWriter`] is recommended.
 #[derive(Debug, Clone)]
 pub struct Destination<S: Write> {
     /// The number of lines written to the sink per round.
@@ -161,9 +161,9 @@ where
     S: Write,
     Self: SinkFromPath<Sink = S>,
 {
-    /// Creates a buffered [`File`] and turns it into a [`Destination`] with `1` as a default for `assigned_lines`.
+    /// Creates a buffered [`std::fs::File`] and turns it into a [`Destination`] with `1` as a default for `assigned_lines`.
     ///
-    /// The `sink` is of type [`BufWriter<File>`].
+    /// The `sink` is of type [`std::io::BufWriter<File>`].
     ///
     /// # Errors
     ///
@@ -193,9 +193,9 @@ where
         Ok(Self::new_with_sink(sink))
     }
 
-    /// Creates a buffered [`File`] and turns it into a [`Destination`].
+    /// Creates a buffered [`std::fs::File`] and turns it into a [`Destination`].
     ///
-    /// The `sink` is of type [`BufWriter<File>`].
+    /// The `sink` is of type [`std::io::BufWriter<File>`].
     ///
     /// # Errors
     ///

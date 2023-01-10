@@ -1,9 +1,9 @@
 # zsplit
 
-![GPL 3.0 License](https://img.shields.io/github/license/TheAlgorythm/zsplit?style=for-the-badge&logo=open-source-initiative)
+![GPL 3.0 License](https://img.shields.io/crates/l/zsplit-cli?style=for-the-badge&logo=open-source-initiative)
 [![Workflow Status](https://img.shields.io/github/workflow/status/TheAlgorythm/zsplit/Rust?style=for-the-badge)](https://github.com/TheAlgorythm/zsplit/actions?query=workflow%3ARust)
-[![Crates.io](https://img.shields.io/crates/v/zsplit?style=for-the-badge&logo=rust)](https://crates.io/crates/zsplit)
-[![crev reviews](https://web.crev.dev/rust-reviews/badge/crev_count/zsplit.svg)](https://web.crev.dev/rust-reviews/crate/zsplit/)
+[![Crates.io](https://img.shields.io/crates/v/zsplit-cli?style=for-the-badge&logo=rust)](https://crates.io/crates/zsplit-cli)
+[![crev reviews](https://web.crev.dev/rust-reviews/badge/crev_count/zsplit-cli.svg)](https://web.crev.dev/rust-reviews/crate/zsplit-cli/)
 
 Split text into multiple files by line.
 

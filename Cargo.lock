@@ -780,11 +780,17 @@ checksum = "712e227841d057c1ee1cd2fb22fa7e5a5461ae8e48fa2ca79ec42cfc1931183f"
 
 [[package]]
 name = "zsplit"
-version = "0.2.1"
+version = "0.3.0-rc3"
+
+[[package]]
+name = "zsplit"
+version = "0.3.0-rc3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "b1aec0aa143d6435c82c6d8119ca4c8bbd765f4e3392dfc9e143bfcebc6d6fc3"
 
 [[package]]
 name = "zsplit-cli"
-version = "0.2.1"
+version = "0.3.0-rc3"
 dependencies = [
  "assert_cmd",
  "assert_fs",
@@ -795,5 +801,5 @@ dependencies = [
  "human-panic",
  "itertools",
  "thiserror",
- "zsplit",
+ "zsplit 0.3.0-rc3 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
