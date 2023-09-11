@@ -1,6 +1,7 @@
 use crate::source::Source;
 use bool_ext::BoolExt;
 use clap::{Parser, ValueHint};
+use error_stack::ResultExt;
 use std::io;
 use std::num::NonZeroUsize;
 use std::path::PathBuf;
@@ -68,7 +69,9 @@ impl Cli {
         Ok(())
     }
 
-    pub fn destinations(&self) -> io::Result<Vec<Destination<impl io::Write + std::fmt::Debug>>> {
+    pub fn destinations(
+        &self,
+    ) -> error_stack::Result<Vec<Destination<impl io::Write + std::fmt::Debug>>, io::Error> {
         self.destinations
             .iter()
             .enumerate()
@@ -77,6 +80,9 @@ impl Cli {
                     file.clone(),
                     usize::from(self.line_factor) * self.get_distribution(index),
                 )
+                .attach_printable_lazy(|| {
+                    format!("Couldn't open file `{}` as writable", file.display())
+                })
             })
             .collect()
     }

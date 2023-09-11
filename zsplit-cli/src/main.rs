@@ -10,8 +10,9 @@ mod source;
 
 use clap::Parser;
 use cli::Cli;
+use error_stack::ResultExt;
 use human_panic::setup_panic;
-use std::convert::TryInto;
+use std::convert::{TryFrom, TryInto};
 use std::io;
 use zsplit::split_round_robin;
 
@@ -26,9 +27,16 @@ fn write_map_err<T, E: std::fmt::Display>(
     })
 }
 
-fn write_map_io_err<T>(res: io::Result<T>) -> Result<T, std::process::ExitCode> {
+fn write_map_io_err<T>(
+    res: error_stack::Result<T, io::Error>,
+) -> Result<T, std::process::ExitCode> {
     res.map_err(|e| {
-        eprintln!("Error: {}", e);
+        eprintln!("Error: {:?}", e);
+
+        let e = match e.downcast_ref::<io::Error>() {
+            Some(e) => e,
+            None => return u8::try_from(exitcode::IOERR).unwrap().into(),
+        };
 
         use io::ErrorKind;
         let code: u8 = match e.kind() {
@@ -51,11 +59,14 @@ fn try_main() -> Result<(), std::process::ExitCode> {
 
     write_map_err(cli.validate(), exitcode::USAGE)?;
 
-    let mut source = write_map_err(cli.source.reading_buffer(), exitcode::NOINPUT)?;
+    let mut source = write_map_io_err(cli.source.reading_buffer())?;
 
     let mut destinations = write_map_io_err(cli.destinations())?;
 
-    write_map_io_err(split_round_robin(&mut source, &mut destinations))
+    write_map_io_err(
+        split_round_robin(&mut source, &mut destinations)
+            .attach_printable("Problem occurred during splitting"),
+    )
 }
 
 fn main() -> std::process::ExitCode {
