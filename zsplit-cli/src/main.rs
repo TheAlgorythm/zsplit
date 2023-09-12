@@ -12,7 +12,7 @@ use clap::Parser;
 use cli::Cli;
 use error_stack::ResultExt;
 use human_panic::setup_panic;
-use std::convert::{TryFrom, TryInto};
+use std::convert::TryInto;
 use std::io;
 use zsplit::split_round_robin;
 
@@ -33,10 +33,7 @@ fn write_map_io_err<T>(
     res.map_err(|e| {
         eprintln!("Error: {:?}", e);
 
-        let e = match e.downcast_ref::<io::Error>() {
-            Some(e) => e,
-            None => return u8::try_from(exitcode::IOERR).unwrap().into(),
-        };
+        let e = e.current_context();
 
         use io::ErrorKind;
         let code: u8 = match e.kind() {
