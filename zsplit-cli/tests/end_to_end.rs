@@ -226,7 +226,7 @@ fn usage_error() {
         .args(&paths(&outputs))
         .assert()
         .failure()
-        .code(exitcode::USAGE);
+        .code(i32::from(sysexits::ExitCode::Usage));
 
     for i in 0..outputs.len() {
         read_to_string(&outputs[i]).unwrap_err();

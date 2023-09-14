@@ -26,7 +26,7 @@ thiserror = "1.0"
 error-stack = "0.4"
 bool_ext = "0.5"
 human-panic = "1.0"
-exitcode = "1.1"
+sysexits = "0.7"
 
 [dev-dependencies]
 zsplit.features = ["test_mock"]

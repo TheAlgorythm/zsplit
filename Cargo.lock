@@ -208,12 +208,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "exitcode"
-version = "1.1.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "de853764b47027c2e862a995c34978ffa63c1501f2e15f987ba11bd4f9bba193"
-
-[[package]]
 name = "fnv"
 version = "1.0.7"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -653,6 +647,12 @@ dependencies = [
 ]
 
 [[package]]
+name = "sysexits"
+version = "0.7.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "ed767c454d933992df9ed9f4fdc01f67630d41879d45f54792a6f83c2269a3d6"
+
+[[package]]
 name = "tempfile"
 version = "3.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -829,9 +829,9 @@ dependencies = [
  "clap",
  "error-stack",
  "escargot",
- "exitcode",
  "human-panic",
  "itertools",
+ "sysexits",
  "thiserror",
  "zsplit 0.3.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
