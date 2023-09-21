@@ -27,6 +27,12 @@ dependencies = [
 ]
 
 [[package]]
+name = "anyhow"
+version = "1.0.75"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "a4668cab20f66d8d020e1fbc0ebe47217433c1b6c8f2040faf858554e394ace6"
+
+[[package]]
 name = "assert_cmd"
 version = "2.0.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -180,6 +186,16 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "e78d4f1cc4ae33bbfc157ed5d5a5ef3bc29227303d595861deb238fcec4e9457"
 
 [[package]]
+name = "error-stack"
+version = "0.4.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "27a72baa257b5e0e2de241967bc5ee8f855d6072351042688621081d66b2a76b"
+dependencies = [
+ "anyhow",
+ "rustc_version",
+]
+
+[[package]]
 name = "escargot"
 version = "0.5.7"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -190,12 +206,6 @@ dependencies = [
  "serde",
  "serde_json",
 ]
-
-[[package]]
-name = "exitcode"
-version = "1.1.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "de853764b47027c2e862a995c34978ffa63c1501f2e15f987ba11bd4f9bba193"
 
 [[package]]
 name = "fnv"
@@ -559,6 +569,15 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "7ef03e0a2b150c7a90d01faf6254c9c48a41e95fb2a8c2ac1c6f0d2b9aefc342"
 
 [[package]]
+name = "rustc_version"
+version = "0.4.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "bfa0f585226d2e68097d4f95d113b15b83a82e819ab25717ec0590d9584ef366"
+dependencies = [
+ "semver",
+]
+
+[[package]]
 name = "ryu"
 version = "1.0.12"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -572,6 +591,12 @@ checksum = "93fc1dc3aaa9bfed95e02e6eadabb4baf7e3078b0bd1b4d7b6b0b68378900502"
 dependencies = [
  "winapi-util",
 ]
+
+[[package]]
+name = "semver"
+version = "1.0.18"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "b0293b4b29daaf487284529cc2f5675b8e57c61f70167ba415a463651fd6a918"
 
 [[package]]
 name = "serde"
@@ -620,6 +645,12 @@ dependencies = [
  "quote",
  "unicode-xid",
 ]
+
+[[package]]
+name = "sysexits"
+version = "0.7.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "ed767c454d933992df9ed9f4fdc01f67630d41879d45f54792a6f83c2269a3d6"
 
 [[package]]
 name = "tempfile"
@@ -780,26 +811,27 @@ checksum = "712e227841d057c1ee1cd2fb22fa7e5a5461ae8e48fa2ca79ec42cfc1931183f"
 
 [[package]]
 name = "zsplit"
-version = "0.3.0-rc3"
+version = "0.3.0"
 
 [[package]]
 name = "zsplit"
-version = "0.3.0-rc3"
+version = "0.3.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b1aec0aa143d6435c82c6d8119ca4c8bbd765f4e3392dfc9e143bfcebc6d6fc3"
+checksum = "9b23ec7a4b6250dbc48dd22b17ff43bc44f6a4a65e69de8a381f36a843cbc4f8"
 
 [[package]]
 name = "zsplit-cli"
-version = "0.3.0-rc3"
+version = "0.3.0"
 dependencies = [
  "assert_cmd",
  "assert_fs",
  "bool_ext",
  "clap",
+ "error-stack",
  "escargot",
- "exitcode",
  "human-panic",
  "itertools",
+ "sysexits",
  "thiserror",
- "zsplit 0.3.0-rc3 (registry+https://github.com/rust-lang/crates.io-index)",
+ "zsplit 0.3.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]

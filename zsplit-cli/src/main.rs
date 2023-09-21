@@ -10,59 +10,58 @@ mod source;
 
 use clap::Parser;
 use cli::Cli;
+use error_stack::ResultExt;
 use human_panic::setup_panic;
-use std::convert::TryInto;
 use std::io;
+use sysexits::ExitCode;
 use zsplit::split_round_robin;
 
-fn write_map_err<T, E: std::fmt::Display>(
-    res: Result<T, E>,
-    code: exitcode::ExitCode,
-) -> Result<T, std::process::ExitCode> {
-    let code: u8 = code.try_into().unwrap();
-    res.map_err(|e| {
-        eprintln!("Error: {}", e);
-        code.into()
-    })
+#[derive(thiserror::Error, Debug, PartialEq, Eq)]
+pub enum Error {
+    #[error("The source is also in destinations")]
+    FileDuplicate,
+    #[error("The quantity of destinations ({destinations_len}) is smaller as of distributions ({distributions_len})")]
+    MoreDistributionsAsDestinations {
+        destinations_len: usize,
+        distributions_len: usize,
+    },
+    #[error("Couldn't read from source")]
+    Source,
+    #[error("Couldn't write to destination")]
+    Destination,
+    #[error("Problem occurred during splitting")]
+    Split,
 }
 
-fn write_map_io_err<T>(res: io::Result<T>) -> Result<T, std::process::ExitCode> {
-    res.map_err(|e| {
-        eprintln!("Error: {}", e);
+type Result<T> = error_stack::Result<T, Error>;
 
-        use io::ErrorKind;
-        let code: u8 = match e.kind() {
-            ErrorKind::PermissionDenied => exitcode::NOPERM,
-            ErrorKind::AlreadyExists => exitcode::CANTCREAT,
-            // NOTE Waits for stabilization of rust-lang/rust#86442
-            // | ErrorKind::IsADirectory
-            // | ErrorKind::ReadOnlyFilesystem
-            // | ErrorKind::FilenameTooLong => exitcode::CANTCREAT,
-            _ => exitcode::IOERR,
-        }
-        .try_into()
-        .unwrap();
-        code.into()
-    })
-}
-
-fn try_main() -> Result<(), std::process::ExitCode> {
+fn try_main() -> Result<()> {
     let cli = Cli::parse();
 
-    write_map_err(cli.validate(), exitcode::USAGE)?;
+    cli.validate().attach(ExitCode::Usage)?;
 
-    let mut source = write_map_err(cli.source.reading_buffer(), exitcode::NOINPUT)?;
+    let mut source = cli.source.reading_buffer().change_context(Error::Source)?;
 
-    let mut destinations = write_map_io_err(cli.destinations())?;
+    let mut destinations = cli.destinations()?;
 
-    write_map_io_err(split_round_robin(&mut source, &mut destinations))
+    split_round_robin(&mut source, &mut destinations).change_context(Error::Split)
 }
 
 fn main() -> std::process::ExitCode {
     setup_panic!();
 
-    if let Err(code) = try_main() {
-        return code;
+    if let Err(report) = try_main() {
+        eprintln!("Error: {:?}", report);
+
+        if let Some(exit_code) = report.downcast_ref::<ExitCode>() {
+            return (*exit_code).into();
+        }
+
+        if let Some(io_error) = report.downcast_ref::<io::Error>() {
+            return ExitCode::from(io_error.kind()).into();
+        }
+
+        return 1.into();
     }
 
     std::process::ExitCode::SUCCESS

@@ -1,26 +1,15 @@
 use crate::source::Source;
 use bool_ext::BoolExt;
 use clap::{Parser, ValueHint};
+use error_stack::ResultExt;
 use std::io;
 use std::num::NonZeroUsize;
 use std::path::PathBuf;
-use thiserror::Error;
 use zsplit::Destination;
 
 #[cfg(test)]
 #[path = "./cli_test.rs"]
 pub mod cli_test;
-
-#[derive(Error, Debug, PartialEq, Eq)]
-pub enum Error {
-    #[error("The source is also in destinations.")]
-    FileDuplicate,
-    #[error("The quantity of destinations ({destinations_len}) is smaller as of distributions ({distributions_len}).")]
-    MoreDistributionsAsDestinations {
-        destinations_len: usize,
-        distributions_len: usize,
-    },
-}
 
 #[derive(Parser, Debug)]
 #[clap(about, author, version)]
@@ -50,25 +39,29 @@ pub struct Cli {
 }
 
 impl Cli {
-    pub fn validate(&self) -> Result<(), Error> {
+    pub fn validate(&self) -> crate::Result<()> {
         if let Source::PathBuf(source) = &self.source {
             self.destinations
                 .iter()
                 .all(|destination| source != destination)
-                .err(Error::FileDuplicate)?;
+                .err(crate::Error::FileDuplicate)?;
         }
 
         let (destinations_len, distributions_len) =
             (self.destinations.len(), self.distributions.len());
-        (destinations_len >= distributions_len).err(Error::MoreDistributionsAsDestinations {
-            destinations_len,
-            distributions_len,
-        })?;
+        (destinations_len >= distributions_len).err(
+            crate::Error::MoreDistributionsAsDestinations {
+                destinations_len,
+                distributions_len,
+            },
+        )?;
 
         Ok(())
     }
 
-    pub fn destinations(&self) -> io::Result<Vec<Destination<impl io::Write + std::fmt::Debug>>> {
+    pub fn destinations(
+        &self,
+    ) -> crate::Result<Vec<Destination<impl io::Write + std::fmt::Debug>>> {
         self.destinations
             .iter()
             .enumerate()
@@ -77,6 +70,10 @@ impl Cli {
                     file.clone(),
                     usize::from(self.line_factor) * self.get_distribution(index),
                 )
+                .change_context(crate::Error::Destination)
+                .attach_printable_lazy(|| {
+                    format!("Couldn't open file `{}` as writable", file.display())
+                })
             })
             .collect()
     }
