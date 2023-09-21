@@ -6,7 +6,7 @@ members = [
 resolver = "2"
 
 [workspace.package]
-authors = ["ZSchoen <dev@zschoen.dev>"]
+authors = ["zSchoen <dev@zschoen.dev>"]
 readme = "README.md"
 homepage = "https://zschoen.dev/projects/zsplit"
 repository = "https://github.com/TheAlgorythm/zsplit"

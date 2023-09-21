@@ -814,14 +814,8 @@ name = "zsplit"
 version = "0.3.0"
 
 [[package]]
-name = "zsplit"
-version = "0.3.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "9b23ec7a4b6250dbc48dd22b17ff43bc44f6a4a65e69de8a381f36a843cbc4f8"
-
-[[package]]
 name = "zsplit-cli"
-version = "0.3.0"
+version = "0.3.1"
 dependencies = [
  "assert_cmd",
  "assert_fs",
@@ -833,5 +827,5 @@ dependencies = [
  "itertools",
  "sysexits",
  "thiserror",
- "zsplit 0.3.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "zsplit",
 ]
