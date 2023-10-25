@@ -12,16 +12,20 @@ env:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      SCCACHE_GHA_ENABLED: "true"
+      RUSTC_WRAPPER: "sccache"
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
     - name: Install latest stable
       uses: actions-rs/toolchain@v1
       with:
         toolchain: stable
         override: true
         components: rustc
-    - name: Cache
-      uses: Swatinem/rust-cache@v1.2.0
+
+    - name: Sccache Action
+      uses: Mozilla-Actions/sccache-action@v0.0.3
     - name: Build
       run: cargo build --release --verbose
     - name: Run tests
@@ -29,7 +33,7 @@ jobs:
   build-oldest-supported:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
     - name: Install oldest supported Rust version
       uses: actions-rs/toolchain@v1
       with:
@@ -53,15 +57,39 @@ jobs:
           toolchain: stable
           override: true
           components: 'rustfmt, clippy'
-      - name: Cache
-        uses: Swatinem/rust-cache@v1.2.0
+
+      - name: Install clippy-sarif
+        uses: baptiste0928/cargo-install@v2.2.0
+        env:
+          RUSTC_WRAPPER: ""
+        with:
+          crate: clippy-sarif
+
+      - name: Install sarif-fmt
+        uses: baptiste0928/cargo-install@v2.2.0
+        env:
+          RUSTC_WRAPPER: ""
+        with:
+          crate: sarif-fmt
       - name: Format
         uses: actions-rs/cargo@v1
         with:
           command: fmt
           args: '-- --check'
-      - name: Clippy
-        uses: actions-rs/cargo@v1
+
+      - name: Run rust-clippy
+        run:
+          cargo clippy
+          --message-format=json | clippy-sarif | tee rust-clippy-results.sarif | sarif-fmt
+        continue-on-error: true
+
+      - name: Upload analysis results to GitHub
+        uses: github/codeql-action/upload-sarif@v2
         with:
-          command: clippy
-          args: '-- -D warnings'
+          sarif_file: rust-clippy-results.sarif
+          category: clippy
+          wait-for-processing: true
+
+      - name: Run rust-clippy for check
+        run:
+          cargo clippy -- -D warnings
