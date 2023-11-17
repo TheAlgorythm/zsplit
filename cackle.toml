@@ -37,6 +37,10 @@ include = [
 allow_proc_macro = true
 
 [pkg.thiserror]
+from.build.allow_apis = [
+    "fs",
+    "process",
+]
 
 [pkg.clap_derive]
 allow_proc_macro = true
@@ -93,6 +97,7 @@ allow_unsafe = true
 from.build.allow_apis = [
     "process",
 ]
+allow_unsafe = true
 
 [pkg.log]
 allow_unsafe = true
@@ -238,3 +243,6 @@ from.test.allow_apis = [
 from.test.allow_apis = [
     "process",
 ]
+
+[pkg.unicode-ident]
+allow_unsafe = true
