@@ -1,0 +1,240 @@
+[common]
+version = 2
+import_std = [
+    "fs",
+    "net",
+    "process",
+    "unix_sockets",
+]
+
+[sandbox]
+kind = "Disabled"
+
+[api.process]
+exclude = [
+    "std::process::ExitCode",
+    "std::process::ExitStatus",
+]
+
+[api.fs]
+include = [
+    "pin_data::User::append_to_file",
+    "pin_data::Data::from_file",
+]
+exclude = [
+    "std::path",
+]
+no_auto_detect = [
+    "landlock",
+]
+
+[api.libc]
+include = [
+    "libc",
+]
+
+[pkg.thiserror-impl]
+allow_proc_macro = true
+
+[pkg.thiserror]
+
+[pkg.clap_derive]
+allow_proc_macro = true
+
+[pkg.atty]
+allow_unsafe = true
+
+[pkg.error-stack]
+allow_unsafe = true
+
+[pkg.serde_derive]
+allow_proc_macro = true
+from.build.allow_apis = [
+    "process",
+]
+
+[pkg.proc-macro-error-attr]
+allow_proc_macro = true
+
+[pkg.lazy_static]
+allow_unsafe = true
+
+[pkg.once_cell]
+allow_unsafe = true
+
+[pkg.regex-automata]
+allow_unsafe = true
+
+[pkg.semver]
+from.build.allow_apis = [
+    "process",
+]
+allow_unsafe = true
+
+[pkg.serde]
+from.build.allow_apis = [
+    "process",
+]
+allow_unsafe = true
+
+[pkg.libc]
+from.build.allow_apis = [
+    "process",
+]
+allow_unsafe = true
+
+[pkg.syn]
+from.build.allow_apis = [
+    "process",
+]
+allow_unsafe = true
+
+[pkg.proc-macro2]
+from.build.allow_apis = [
+    "process",
+]
+
+[pkg.log]
+allow_unsafe = true
+
+[pkg.same-file]
+allow_unsafe = true
+
+[pkg.version_check]
+from.build.allow_apis = [
+    "process",
+]
+
+[pkg.autocfg]
+from.build.allow_apis = [
+    "fs",
+    "process",
+]
+
+[pkg.memchr]
+allow_unsafe = true
+
+[pkg.cc]
+allow_unsafe = true
+from.build.allow_apis = [
+    "fs",
+    "process",
+]
+
+[pkg.doc-comment]
+from.build.allow_apis = [
+    "process",
+]
+
+[pkg.gimli]
+allow_unsafe = true
+
+[pkg.ppv-lite86]
+allow_unsafe = true
+
+[pkg.bitflags]
+allow_unsafe = true
+
+[pkg.crossbeam-utils]
+allow_unsafe = true
+
+[pkg.thread_local]
+allow_unsafe = true
+
+[pkg.serde_json]
+from.build.allow_apis = [
+    "process",
+]
+allow_unsafe = true
+
+[pkg.getrandom]
+allow_unsafe = true
+
+[pkg.hashbrown]
+allow_unsafe = true
+
+[pkg.ryu]
+allow_unsafe = true
+
+[pkg.rustc_version]
+from.build.allow_apis = [
+    "process",
+]
+
+[pkg.os_str_bytes]
+allow_unsafe = true
+
+[pkg.rand_core]
+allow_unsafe = true
+
+[pkg.escargot]
+build.allow_apis = [
+    "fs",
+]
+from.test.allow_apis = [
+    "process",
+]
+
+[pkg.itoa]
+allow_unsafe = true
+
+[pkg.bstr]
+allow_unsafe = true
+
+[pkg.aho-corasick]
+allow_unsafe = true
+
+[pkg.predicates]
+allow_unsafe = true
+
+[pkg.wait-timeout]
+allow_unsafe = true
+from.test.allow_apis = [
+    "process",
+    "unix_sockets",
+]
+
+[pkg.addr2line]
+allow_unsafe = true
+
+[pkg.regex]
+allow_unsafe = true
+
+[pkg.object]
+allow_unsafe = true
+
+[pkg.uuid]
+allow_unsafe = true
+
+[pkg.indexmap]
+allow_unsafe = true
+
+[pkg.rand_chacha]
+allow_unsafe = true
+
+[pkg.backtrace]
+allow_unsafe = true
+
+[pkg.rand]
+allow_unsafe = true
+
+[pkg.zsplit-cli]
+allow_apis = [
+    "fs",
+]
+
+[pkg.tempfile]
+allow_unsafe = true
+from.test.allow_apis = [
+    "fs",
+]
+
+[pkg.assert_fs]
+from.test.allow_apis = [
+    "fs",
+]
+
+[pkg.assert_cmd]
+from.test.allow_apis = [
+    "process",
+]
