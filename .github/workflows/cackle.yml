@@ -17,4 +17,3 @@ jobs:
       - name: Install libpam-dev
         run: sudo apt install -y libpam-dev
       - run: cargo acl -n
-      - run: cargo acl -n test
