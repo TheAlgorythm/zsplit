@@ -17,15 +17,14 @@ exclude = [
 ]
 
 [api.fs]
-include = [
-    "pin_data::User::append_to_file",
-    "pin_data::Data::from_file",
-]
 exclude = [
     "std::path",
 ]
 no_auto_detect = [
     "landlock",
+]
+include = [
+    "rustix::fs",
 ]
 
 [api.libc]
@@ -53,9 +52,6 @@ allow_unsafe = true
 
 [pkg.serde_derive]
 allow_proc_macro = true
-from.build.allow_apis = [
-    "process",
-]
 
 [pkg.proc-macro-error-attr]
 allow_proc_macro = true
@@ -134,22 +130,13 @@ from.build.allow_apis = [
 [pkg.gimli]
 allow_unsafe = true
 
-[pkg.ppv-lite86]
-allow_unsafe = true
-
 [pkg.bitflags]
-allow_unsafe = true
-
-[pkg.crossbeam-utils]
 allow_unsafe = true
 
 [pkg.thread_local]
 allow_unsafe = true
 
 [pkg.serde_json]
-from.build.allow_apis = [
-    "process",
-]
 allow_unsafe = true
 
 [pkg.getrandom]
@@ -167,9 +154,6 @@ from.build.allow_apis = [
 ]
 
 [pkg.os_str_bytes]
-allow_unsafe = true
-
-[pkg.rand_core]
 allow_unsafe = true
 
 [pkg.escargot]
@@ -214,14 +198,12 @@ allow_unsafe = true
 [pkg.indexmap]
 allow_unsafe = true
 
-[pkg.rand_chacha]
-allow_unsafe = true
-
 [pkg.backtrace]
 allow_unsafe = true
-
-[pkg.rand]
-allow_unsafe = true
+allow_apis = [
+    "fs",
+    "libc",
+]
 
 [pkg.zsplit-cli]
 allow_apis = [
@@ -249,3 +231,36 @@ allow_unsafe = true
 
 [pkg.itertools]
 allow_unsafe = true
+
+[pkg.rustix]
+from.build.allow_apis = [
+    "fs",
+    "process",
+]
+allow_unsafe = true
+
+[pkg.either]
+allow_unsafe = true
+
+[pkg.linux-raw-sys]
+allow_unsafe = true
+
+[pkg.concolor-query]
+allow_unsafe = true
+
+[pkg.anstyle]
+allow_unsafe = true
+
+[pkg.is-terminal]
+allow_unsafe = true
+
+[pkg.os_info]
+allow_apis = [
+    "fs",
+    "process",
+]
+
+[pkg.human-panic]
+allow_apis = [
+    "fs",
+]
