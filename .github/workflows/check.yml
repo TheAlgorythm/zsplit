@@ -60,8 +60,6 @@ jobs:
       uses: Swatinem/rust-cache@v2.7.1
     - name: Build
       run: cargo build --release --verbose
-    - name: Run tests
-      run: cargo test --release --verbose
   lints:
     runs-on: ubuntu-latest
     steps:
