@@ -1,0 +1,22 @@
+name: Install
+
+on:
+  schedule:
+      - cron: 13 12 * * 1,4
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  install-latest-cli:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Install oldest supported Rust version
+      uses: actions-rs/toolchain@v1
+      with:
+        toolchain: "1.66"
+        override: true
+        components: rustc
+    - name: Install
+      run: cargo install zsplit-cli
