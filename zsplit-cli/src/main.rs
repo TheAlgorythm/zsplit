@@ -1,9 +1,4 @@
-#![forbid(unsafe_code)]
-#![warn(clippy::use_self)]
-#![warn(clippy::wildcard_imports)]
-#![warn(clippy::clone_on_ref_ptr)]
-#![warn(clippy::cognitive_complexity)]
-#![warn(clippy::disallowed_types)]
+//! Application for using the [`zsplit`] crate on the CLI.
 
 mod cli;
 mod source;
@@ -17,6 +12,7 @@ use sysexits::ExitCode;
 use zsplit::split_round_robin;
 
 #[derive(thiserror::Error, Debug, PartialEq, Eq)]
+#[allow(missing_docs)]
 pub enum Error {
     #[error("The source is also in destinations")]
     FileDuplicate,
@@ -51,7 +47,7 @@ fn main() -> std::process::ExitCode {
     setup_panic!();
 
     if let Err(report) = try_main() {
-        eprintln!("Error: {:?}", report);
+        eprintln!("Error: {report:?}");
 
         if let Some(exit_code) = report.downcast_ref::<ExitCode>() {
             return (*exit_code).into();

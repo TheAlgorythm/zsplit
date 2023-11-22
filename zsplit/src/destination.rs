@@ -6,7 +6,7 @@ use std::path::Path;
 
 #[cfg(any(test, feature = "test_mock"))]
 #[path = "./destination_test.rs"]
-pub mod destination_test;
+mod destination_test;
 
 /// The `sink` with metadata for the splitting operation.
 ///
@@ -35,8 +35,8 @@ impl<S: Write> Destination<S> {
     #[inline]
     pub fn new(sink: S, assigned_lines: usize) -> Self {
         Self {
-            sink,
             assigned_lines,
+            sink,
         }
     }
 
@@ -84,7 +84,7 @@ impl Destination<Vec<u8>> {
     ///
     /// # Warnings
     ///
-    /// As the buffer is completely in memory, an unbounded input could lead to a DoS
+    /// As the buffer is completely in memory, an unbounded input could lead to a `DoS`
     /// vulnerability.
     ///
     /// # Examples
@@ -95,6 +95,7 @@ impl Destination<Vec<u8>> {
     ///
     /// Destination::buffer();
     /// ```
+    #[must_use]
     pub fn buffer() -> Self {
         Self::new_with_sink(Vec::new())
     }
@@ -103,7 +104,7 @@ impl Destination<Vec<u8>> {
     ///
     /// # Warnings
     ///
-    /// As the buffer is completely in memory, an unbounded input could lead to a DoS
+    /// As the buffer is completely in memory, an unbounded input could lead to a `DoS`
     /// vulnerability.
     ///
     /// # Examples
@@ -114,6 +115,7 @@ impl Destination<Vec<u8>> {
     ///
     /// Destination::buffer_with_lines(42);
     /// ```
+    #[must_use]
     pub fn buffer_with_lines(assigned_lines: usize) -> Self {
         Self::new(Vec::new(), assigned_lines)
     }

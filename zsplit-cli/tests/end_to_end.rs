@@ -30,7 +30,7 @@ fn close(files: Vec<NamedTempFile>) {
     files
         .into_iter()
         .try_for_each(NamedTempFile::close)
-        .unwrap()
+        .unwrap();
 }
 
 fn zsplit() -> Command {
@@ -72,7 +72,7 @@ fn simple() {
 
 #[test]
 fn simple_pipe() {
-    let to = 100000;
+    let to = 100_000;
 
     let outputs = outputs("simple_pipe", 4);
 
@@ -95,7 +95,7 @@ fn simple_pipe() {
 
 #[test]
 fn unsymmetric_pipe() {
-    let to = 100000;
+    let to = 100_000;
 
     let outputs = outputs("unsymmetric_pipe", 4);
 
@@ -103,7 +103,7 @@ fn unsymmetric_pipe() {
         .write_stdin(seq(0, to, 1))
         .arg("-")
         .args(&paths(&outputs))
-        .args(&["-d", "3", "3", "2"])
+        .args(["-d", "3", "3", "2"])
         .assert()
         .success();
 
@@ -129,7 +129,7 @@ fn unsymmetric_pipe() {
 
 #[test]
 fn multiple_pipe() {
-    let to = 100000;
+    let to = 100_000;
 
     let outputs = outputs("multiple_pipe", 4);
 
@@ -163,7 +163,7 @@ fn multiple_pipe() {
 
 #[test]
 fn multiple_unsymmetric_pipe() {
-    let to = 100000;
+    let to = 100_000;
 
     let outputs = outputs("multiple_unsymmetric_pipe", 3);
 
@@ -172,7 +172,7 @@ fn multiple_unsymmetric_pipe() {
         .arg("-")
         .args(&paths(&outputs))
         .arg("--line-factor=2")
-        .args(&["-d", "1", "3", "2"])
+        .args(["-d", "1", "3", "2"])
         .assert()
         .success();
 
@@ -194,7 +194,7 @@ fn multiple_unsymmetric_pipe() {
 
 #[test]
 fn many_outputs() {
-    let to = 100000;
+    let to = 100_000;
 
     let outputs = outputs("many_outputs", 42);
 

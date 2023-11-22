@@ -17,3 +17,6 @@ exclude = ["/scripts", "*.drawio"]
 [features]
 default = []
 test_mock = []
+
+[lints]
+workspace = true

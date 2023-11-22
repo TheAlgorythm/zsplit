@@ -9,13 +9,13 @@ use std::path::PathBuf;
 mod source_test;
 
 #[derive(Debug, PartialEq, Eq)]
-pub enum Source {
+pub(crate) enum Source {
     PathBuf(PathBuf),
     StdIn,
 }
 
 impl Source {
-    pub fn reading_buffer(&self) -> Result<Box<dyn BufRead>, io::Error> {
+    pub(crate) fn reading_buffer(&self) -> Result<Box<dyn BufRead>, io::Error> {
         match self {
             Self::PathBuf(current_file) => Ok(Box::new(BufReader::new(
                 File::open(current_file).attach_printable_lazy(|| {
@@ -32,7 +32,7 @@ impl Source {
         }
     }
 
-    pub fn from_os_str(path: &std::ffi::OsStr) -> Self {
+    pub(crate) fn from_os_str(path: &std::ffi::OsStr) -> Self {
         if path == "-" {
             return Self::StdIn;
         }

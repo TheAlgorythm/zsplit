@@ -1,15 +1,14 @@
 use super::*;
 mod round_robin {
     use super::*;
-    use crate::destination::destination_test::IdSink;
     use crate::split::round_robin::*;
 
     #[test]
     fn simple_map_line_destinations() {
         let destinations = [
-            Destination::new(IdSink::new(0), 1),
-            Destination::new(IdSink::new(1), 2),
-            Destination::new(IdSink::new(2), 3),
+            Destination::new(io::sink(), 1),
+            Destination::new(io::sink(), 2),
+            Destination::new(io::sink(), 3),
         ];
 
         let mapped_line_destinations = map_line_destinations(&destinations);
@@ -27,8 +26,8 @@ mod round_robin {
     #[test]
     fn empty_assigned_lines_map_line_destinations() {
         let destinations = [
-            Destination::new(IdSink::new(0), 0),
-            Destination::new(IdSink::new(1), 1),
+            Destination::new(io::sink(), 0),
+            Destination::new(io::sink(), 1),
         ];
 
         let mapped_line_destinations = map_line_destinations(&destinations);
