@@ -17,7 +17,7 @@ lto = "thin"
 [workspace.lints.rust]
 unsafe_code = "forbid"
 missing_abi = "warn"
-# missing_docs = "warn"
+missing_docs = "warn"
 noop_method_call = "warn"
 pointer_structural_match = "warn"
 unreachable_pub = "warn"

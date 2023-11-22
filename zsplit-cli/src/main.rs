@@ -1,3 +1,5 @@
+//! Application for using the [`zsplit`] crate on the CLI.
+
 mod cli;
 mod source;
 
@@ -10,6 +12,7 @@ use sysexits::ExitCode;
 use zsplit::split_round_robin;
 
 #[derive(thiserror::Error, Debug, PartialEq, Eq)]
+#[allow(missing_docs)]
 pub enum Error {
     #[error("The source is also in destinations")]
     FileDuplicate,
