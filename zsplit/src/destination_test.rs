@@ -23,7 +23,8 @@ pub struct IdSink {
 }
 
 impl IdSink {
-    #[must_use] pub fn new(id: u64) -> Self {
+    #[must_use]
+    pub fn new(id: u64) -> Self {
         Self {
             id,
             sink: io::sink(),
@@ -31,7 +32,8 @@ impl IdSink {
     }
 
     #[inline]
-    #[must_use] pub fn id(&self) -> u64 {
+    #[must_use]
+    pub fn id(&self) -> u64 {
         self.id
     }
 }

@@ -34,7 +34,10 @@ impl<S: Write> Destination<S> {
     /// ```
     #[inline]
     pub fn new(sink: S, assigned_lines: usize) -> Self {
-        Self { assigned_lines, sink }
+        Self {
+            assigned_lines,
+            sink,
+        }
     }
 
     /// Creates a [`Destination`] with `1` as a default for `assigned_lines`.
@@ -92,7 +95,8 @@ impl Destination<Vec<u8>> {
     ///
     /// Destination::buffer();
     /// ```
-    #[must_use] pub fn buffer() -> Self {
+    #[must_use]
+    pub fn buffer() -> Self {
         Self::new_with_sink(Vec::new())
     }
 
@@ -111,7 +115,8 @@ impl Destination<Vec<u8>> {
     ///
     /// Destination::buffer_with_lines(42);
     /// ```
-    #[must_use] pub fn buffer_with_lines(assigned_lines: usize) -> Self {
+    #[must_use]
+    pub fn buffer_with_lines(assigned_lines: usize) -> Self {
         Self::new(Vec::new(), assigned_lines)
     }
 
