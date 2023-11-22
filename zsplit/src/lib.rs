@@ -74,13 +74,6 @@
 //! child_2.kill().unwrap();
 //! ```
 
-#![forbid(unsafe_code)]
-#![warn(clippy::use_self)]
-#![warn(clippy::wildcard_imports)]
-#![warn(clippy::clone_on_ref_ptr)]
-#![warn(clippy::cognitive_complexity)]
-#![warn(clippy::disallowed_types)]
-
 pub mod destination;
 pub mod split;
 
