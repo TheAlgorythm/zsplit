@@ -6,7 +6,7 @@ use std::path::Path;
 
 #[cfg(any(test, feature = "test_mock"))]
 #[path = "./destination_test.rs"]
-pub mod destination_test;
+mod destination_test;
 
 /// The `sink` with metadata for the splitting operation.
 ///
