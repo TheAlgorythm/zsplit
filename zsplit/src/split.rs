@@ -10,6 +10,11 @@ mod split_test;
 
 /// Splits the `source` round robin like into `destinations`.
 ///
+/// # Errors
+///
+/// Shortcircuits with the IO-error when there is an error during reading
+/// from the `source` or writing to one of the `destinations`.
+///
 /// # Examples
 ///
 /// Basic usage:
