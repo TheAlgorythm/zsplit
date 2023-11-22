@@ -9,18 +9,18 @@ use zsplit::Destination;
 
 #[cfg(test)]
 #[path = "./cli_test.rs"]
-pub mod cli_test;
+pub(crate) mod cli_test;
 
 #[derive(Parser, Debug)]
 #[clap(about, author, version)]
-pub struct Cli {
+pub(crate) struct Cli {
     /// A factor to multiply the grouping size of the distribution.
     #[clap(short = 'f', long, default_value = "1")]
-    pub line_factor: NonZeroUsize,
+    pub(crate) line_factor: NonZeroUsize,
 
     /// The file which should be splitted. Use '-' for piping the content to zsplit.
     #[clap(parse(from_os_str = Source::from_os_str), value_hint(ValueHint::FilePath))]
-    pub source: Source,
+    pub(crate) source: Source,
 
     /// A list of destinations for the splitted contents.
     #[clap(
@@ -30,16 +30,16 @@ pub struct Cli {
         parse(from_os_str),
         value_hint(ValueHint::FilePath)
     )]
-    pub destinations: Vec<PathBuf>,
+    pub(crate) destinations: Vec<PathBuf>,
 
     /// Defines how many lines are assigned to a destination. The distributions have to be in the
     /// same order as the destinations. It defaults to 1.
     #[clap(short, long, multiple_values(true), min_values(0))]
-    pub distributions: Vec<NonZeroUsize>,
+    pub(crate) distributions: Vec<NonZeroUsize>,
 }
 
 impl Cli {
-    pub fn validate(&self) -> crate::Result<()> {
+    pub(crate) fn validate(&self) -> crate::Result<()> {
         if let Source::PathBuf(source) = &self.source {
             self.destinations
                 .iter()
@@ -59,7 +59,7 @@ impl Cli {
         Ok(())
     }
 
-    pub fn destinations(
+    pub(crate) fn destinations(
         &self,
     ) -> crate::Result<Vec<Destination<impl io::Write + std::fmt::Debug>>> {
         self.destinations
@@ -81,7 +81,6 @@ impl Cli {
     fn get_distribution(&self, index: usize) -> usize {
         self.distributions
             .get(index)
-            .map(|distribution| usize::from(*distribution))
-            .unwrap_or(1)
+            .map_or(1, |distribution| usize::from(*distribution))
     }
 }

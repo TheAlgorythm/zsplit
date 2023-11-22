@@ -47,7 +47,7 @@ mod split_test;
 /// assert_eq!(first_destination.into_utf8_string().unwrap(), "Hello\n42!\n");
 /// assert_eq!(second_destination.into_utf8_string().unwrap(), "World,\n");
 /// ```
-pub fn split_round_robin<S: Write>(
+pub fn round_robin<S: Write>(
     source: &mut dyn BufRead,
     destinations: &mut [Destination<S>],
 ) -> io::Result<()> {
@@ -73,7 +73,7 @@ mod round_robin {
     /// ```plain
     /// mapped_line_destinations[line % mapped_line_destinations.len()] -> index(destination)
     /// ```
-    pub fn map_line_destinations<S: Write>(destinations: &[Destination<S>]) -> Vec<usize> {
+    pub(crate) fn map_line_destinations<S: Write>(destinations: &[Destination<S>]) -> Vec<usize> {
         destinations
             .iter()
             .enumerate()
@@ -83,7 +83,7 @@ mod round_robin {
             .collect()
     }
 
-    pub fn write_lines<S: Write>(
+    pub(crate) fn write_lines<S: Write>(
         source: &mut dyn BufRead,
         destinations: &mut [Destination<S>],
         mapped_line_destinations: &[usize],

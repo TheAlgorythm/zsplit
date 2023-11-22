@@ -6,7 +6,7 @@
 //! # Warnings
 //!
 //! As a line of [`std::io::BufReader`] has to be completely in memory, an unbounded long line
-//! could lead to a DoS vulnerability.
+//! could lead to a `DoS` vulnerability.
 //!
 //! # Examples
 //!
@@ -87,7 +87,7 @@ pub mod split;
 /// All you need from this Crate.
 pub mod prelude {
     pub use crate::destination::Destination;
-    pub use crate::split::split_round_robin;
+    pub use crate::split::round_robin as split_round_robin;
 }
 
 #[doc(inline)]

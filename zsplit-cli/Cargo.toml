@@ -34,3 +34,6 @@ itertools = "0.12"
 assert_fs = "1.0"
 assert_cmd = "2.0"
 escargot = "0.5"
+
+[lints]
+workspace = true
