@@ -1,6 +1,6 @@
 [package]
 name = "zsplit-cli"
-version = "0.3.1"
+version = "0.4.0"
 edition = "2021"
 rust-version = "1.66"
 license = "GPL-3.0-only"
@@ -20,7 +20,7 @@ path = "src/main.rs"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-zsplit = { version = "0.3", path = "../zsplit" }
+zsplit = { version = "~0.4", path = "../zsplit" }
 clap = { version = "3.0", features = ["derive"] }
 thiserror = "1.0"
 error-stack = "0.4"
@@ -29,7 +29,7 @@ human-panic = "=1.1.0"
 sysexits = "0.7"
 
 [dev-dependencies]
-zsplit = { version = "0.3", path = "../zsplit", features = ["test_mock"] }
+zsplit = { version = "~0.4", path = "../zsplit", features = ["test_mock"] }
 itertools = "0.12"
 assert_fs = "1.0"
 assert_cmd = "2.0"
