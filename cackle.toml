@@ -251,6 +251,11 @@ allow_apis = [
     "process",
 ]
 
+[pkg.sysexits]
+allow_apis = [
+    "process",
+]
+
 [pkg.human-panic]
 allow_apis = [
     "fs",
