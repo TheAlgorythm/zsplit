@@ -21,7 +21,7 @@ path = "src/main.rs"
 
 [dependencies]
 zsplit = { version = "~0.4", path = "../zsplit" }
-clap = { version = "3.0", features = ["derive"] }
+clap = { version = "4.4", features = ["derive"] }
 thiserror = "1.0"
 error-stack = "0.4"
 bool_ext = "0.5"
