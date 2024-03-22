@@ -37,7 +37,6 @@ allow_proc_macro = true
 
 [pkg.thiserror]
 from.build.allow_apis = [
-    "fs",
     "process",
 ]
 
@@ -216,6 +215,9 @@ from.test.allow_apis = [
 from.test.allow_apis = [
     "process",
 ]
+from.build.allow_apis = [
+    "fs",
+]
 
 [pkg.unicode-ident]
 allow_unsafe = true
@@ -252,20 +254,11 @@ allow_apis = [
 ]
 
 [pkg.sysexits]
-allow_apis = [
-    "process",
-]
 
 [pkg.human-panic]
 allow_apis = [
     "fs",
 ]
-
-[pkg.scopeguard]
-allow_unsafe = true
-
-[pkg.memoffset]
-allow_unsafe = true
 
 [pkg.crossbeam-utils]
 allow_unsafe = true
