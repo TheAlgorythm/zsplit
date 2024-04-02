@@ -44,12 +44,12 @@ impl Cli {
             self.destinations
                 .iter()
                 .all(|destination| source != destination)
-                .err(crate::Error::FileDuplicate)?;
+                .or_err(crate::Error::FileDuplicate)?;
         }
 
         let (destinations_len, distributions_len) =
             (self.destinations.len(), self.distributions.len());
-        (destinations_len >= distributions_len).err(
+        (destinations_len >= distributions_len).or_err(
             crate::Error::MoreDistributionsAsDestinations {
                 destinations_len,
                 distributions_len,
