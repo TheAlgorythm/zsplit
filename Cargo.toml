@@ -25,7 +25,6 @@ unused_extern_crates = "warn"
 unused_import_braces = "warn"
 unused_lifetimes = "warn"
 unused_qualifications = "warn"
-unused_tuple_struct_fields = "warn"
 
 [workspace.lints.clippy]
 use_self = "warn"
