@@ -31,7 +31,7 @@ sysexits = "0.7"
 [dev-dependencies]
 zsplit = { version = "~0.4", path = "../zsplit", features = ["test_mock"] }
 itertools = "0.12"
-assert_fs = "1.0"
+assert_fs = "1.1"
 assert_cmd = "2.0"
 escargot = "0.5"
 
