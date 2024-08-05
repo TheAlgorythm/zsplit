@@ -24,7 +24,7 @@ zsplit = { version = "~0.4", path = "../zsplit" }
 clap = { version = "3.0", features = ["derive"] }
 thiserror = "1.0"
 error-stack = "0.5"
-bool_ext = "0.6"
+bool_ext = "0.7"
 human-panic = "=1.1.0"
 sysexits = "0.8"
 

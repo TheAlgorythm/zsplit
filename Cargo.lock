@@ -114,9 +114,9 @@ checksum = "327762f6e5a765692301e5bb513e0d9fef63be86bbc14528052b1cd3e6f03e07"
 
 [[package]]
 name = "bool_ext"
-version = "0.6.2"
+version = "0.7.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ef15937d77b0dcef3157efda6de4992a6d947ff1910cc7f9d170414faa99be60"
+checksum = "035e76c653904ecd3879de303f91ea9ddb809e52a4fb0e08ed657c3cfa483c05"
 
 [[package]]
 name = "bstr"
