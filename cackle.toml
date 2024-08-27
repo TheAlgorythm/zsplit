@@ -268,3 +268,6 @@ allow_unsafe = true
 
 [pkg.crossbeam-deque]
 allow_unsafe = true
+
+[pkg.shlex]
+allow_unsafe = true
