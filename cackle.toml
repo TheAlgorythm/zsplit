@@ -238,13 +238,7 @@ allow_unsafe = true
 [pkg.linux-raw-sys]
 allow_unsafe = true
 
-[pkg.concolor-query]
-allow_unsafe = true
-
 [pkg.anstyle]
-allow_unsafe = true
-
-[pkg.is-terminal]
 allow_unsafe = true
 
 [pkg.os_info]
@@ -270,4 +264,16 @@ allow_unsafe = true
 allow_unsafe = true
 
 [pkg.shlex]
+allow_unsafe = true
+
+[pkg.utf8parse]
+allow_unsafe = true
+
+[pkg.anstyle-query]
+allow_unsafe = true
+
+[pkg.anstyle-parse]
+allow_unsafe = true
+
+[pkg.anstream]
 allow_unsafe = true
