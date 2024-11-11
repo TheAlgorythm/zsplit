@@ -2,7 +2,7 @@
 name = "zsplit-cli"
 version = "0.4.0"
 edition = "2021"
-rust-version = "1.66"
+rust-version = "1.74"
 license = "GPL-3.0-only"
 authors.workspace = true
 readme.workspace = true
@@ -25,7 +25,7 @@ clap = { version = "3.0", features = ["derive"] }
 thiserror = "1.0"
 error-stack = "0.5"
 bool_ext = "0.7"
-human-panic = "=2.0.2"
+human-panic = "2.0"
 sysexits = "0.8"
 
 [dev-dependencies]
