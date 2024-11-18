@@ -86,10 +86,11 @@ from.build.allow_apis = [
 allow_unsafe = true
 
 [pkg.proc-macro2]
-from.build.allow_apis = [
+allow_unsafe = true
+allow_apis = [
+    "fs",
     "process",
 ]
-allow_unsafe = true
 
 [pkg.log]
 allow_unsafe = true
