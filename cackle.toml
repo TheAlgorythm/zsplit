@@ -36,7 +36,8 @@ include = [
 allow_proc_macro = true
 
 [pkg.thiserror]
-from.build.allow_apis = [
+build.allow_apis = [
+    "fs",
     "process",
 ]
 
