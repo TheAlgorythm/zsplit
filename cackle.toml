@@ -113,13 +113,6 @@ from.build.allow_apis = [
 [pkg.memchr]
 allow_unsafe = true
 
-[pkg.cc]
-allow_unsafe = true
-from.build.allow_apis = [
-    "fs",
-    "process",
-]
-
 [pkg.doc-comment]
 from.build.allow_apis = [
     "process",
@@ -183,6 +176,9 @@ allow_unsafe = true
 
 [pkg.object]
 allow_unsafe = true
+build.allow_apis = [
+    "process",
+]
 
 [pkg.uuid]
 allow_unsafe = true
@@ -263,9 +259,6 @@ allow_unsafe = true
 allow_unsafe = true
 
 [pkg.crossbeam-deque]
-allow_unsafe = true
-
-[pkg.shlex]
 allow_unsafe = true
 
 [pkg.utf8parse]
