@@ -30,7 +30,7 @@ sysexits = "0.8"
 
 [dev-dependencies]
 zsplit = { version = "~0.4", path = "../zsplit", features = ["test_mock"] }
-itertools = "0.13"
+itertools = "0.14"
 assert_fs = "1.1"
 assert_cmd = "2.0"
 escargot = "0.5"
