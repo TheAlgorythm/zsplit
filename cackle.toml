@@ -129,9 +129,6 @@ allow_unsafe = true
 
 [pkg.getrandom]
 allow_unsafe = true
-from.test.allow_apis = [
-    "libc",
-]
 
 [pkg.hashbrown]
 allow_unsafe = true
