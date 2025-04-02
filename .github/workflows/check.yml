@@ -25,7 +25,7 @@ jobs:
         components: rustc
 
     - name: Sccache Action
-      uses: Mozilla-Actions/sccache-action@v0.0.7
+      uses: Mozilla-Actions/sccache-action@v0.0.9
     - name: Build
       run: cargo build --release --verbose
     - name: Run tests
@@ -41,7 +41,7 @@ jobs:
         override: true
         components: rustc
     - name: Cache
-      uses: Swatinem/rust-cache@v2.7.7
+      uses: Swatinem/rust-cache@v2.7.8
     - name: Build
       run: cargo build --release --verbose --workspace --exclude zsplit-cli
     - name: Run tests
@@ -57,7 +57,7 @@ jobs:
         override: true
         components: rustc
     - name: Cache
-      uses: Swatinem/rust-cache@v2.7.7
+      uses: Swatinem/rust-cache@v2.7.8
     - name: Build
       run: cargo build --release --verbose
   lints:
