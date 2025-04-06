@@ -8,6 +8,9 @@ on:
 
 env:
   CARGO_TERM_COLOR: always
+  CARGO_INCREMENTAL: 0
+  CARGO_PROFILE_DEV_DEBUG: 0
+  CARGO_PROFILE_TEST_DEBUG: 0
 
 jobs:
   build:
@@ -27,9 +30,9 @@ jobs:
     - name: Sccache Action
       uses: Mozilla-Actions/sccache-action@v0.0.9
     - name: Build
-      run: cargo build --release --verbose
+      run: cargo build --locked --release --verbose
     - name: Run tests
-      run: cargo test --release --verbose
+      run: cargo test --locked --release --verbose
   build-lib-msrv:
     runs-on: ubuntu-latest
     steps:
@@ -43,9 +46,9 @@ jobs:
     - name: Cache
       uses: Swatinem/rust-cache@v2.7.8
     - name: Build
-      run: cargo build --release --verbose --workspace --exclude zsplit-cli
+      run: cargo build --locked --release --verbose --workspace --exclude zsplit-cli
     - name: Run tests
-      run: cargo test --release --verbose --workspace --exclude zsplit-cli
+      run: cargo test --locked --release --verbose --workspace --exclude zsplit-cli
   build-all-msrv:
     runs-on: ubuntu-latest
     steps:
@@ -59,7 +62,7 @@ jobs:
     - name: Cache
       uses: Swatinem/rust-cache@v2.7.8
     - name: Build
-      run: cargo build --release --verbose
+      run: cargo build --locked --release --verbose
   lints:
     runs-on: ubuntu-latest
     steps:
@@ -93,7 +96,7 @@ jobs:
 
       - name: Run rust-clippy
         run:
-          cargo clippy
+          cargo clippy --locked
           --message-format=json | clippy-sarif | tee rust-clippy-results.sarif | sarif-fmt
         continue-on-error: true
 
@@ -106,4 +109,4 @@ jobs:
 
       - name: Run rust-clippy for check
         run:
-          cargo clippy -- -D warnings
+          cargo clippy --locked -- -D warnings
