@@ -110,3 +110,7 @@ jobs:
       - name: Run rust-clippy for check
         run:
           cargo clippy --locked -- -D warnings
+
+      - name: Format
+        run:
+          cargo fmt -- --check
