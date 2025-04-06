@@ -125,6 +125,8 @@ $ cat test_folder/c
 $ cargo install zsplit-cli
 ```
 
+When the installation is done with the MSRV, it could be necessary to add the `--locked` CLI argument as some dependencies may increase their MSRV without a version bump according to SemVer.
+
 ## CREV - Rust code reviews - Raise awareness
 
 Please, spread this info !\
