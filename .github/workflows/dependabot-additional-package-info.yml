@@ -2,7 +2,7 @@ name: Add Package Info on Dependabot PR
 
 on:
   pull_request:
-    types: [opened, synchronize]
+    types: [opened]
     branches:
       - MAIN
 
