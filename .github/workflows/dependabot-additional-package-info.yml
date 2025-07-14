@@ -1,0 +1,61 @@
+name: Add Package Info on Dependabot PR
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+    branches:
+      - MAIN
+
+jobs:
+  add-package-info:
+    runs-on: ubuntu-latest
+    if: github.actor == 'dependabot[bot]' && contains(github.event.pull_request.labels.*.name, 'dependencies')  && contains(github.event.pull_request.labels.*.name, 'rust')
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Extract package name and version
+        id: extract_package
+        run: |
+          # Extract the package name and version from the PR title
+          # Example PR title: "Bump package-name from x.x.x to y.y.y"
+          echo "PR Title: ${{ github.event.pull_request.title }}"
+          PACKAGE_NAME=$(echo "${{ github.event.pull_request.title }}" | sed -E 's/^Bump ([^ ]+) from .*/\1/')
+          echo "PACKAGE_NAME=${PACKAGE_NAME}" >> $GITHUB_ENV
+
+      - name: Install latest stable
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          override: true
+          components: rustc
+
+      - name: Get package dependencies
+        id: get_package_deps
+        run: |
+          # Replace with your CLI command that accepts the package name
+          PACKAGE_DEPS=$(cargo tree $PACKAGE_NAME)
+          echo "::set-output name=info::$PACKAGE_DEPS"
+
+      - name: Get package reverse dependencies
+        id: get_package_rev_deps
+        run: |
+          # Replace with your CLI command that accepts the package name
+          PACKAGE_REV_DEPS=$(cargo tree --inverse $PACKAGE_NAME)
+          echo "::set-output name=info::$PACKAGE_REV_DEPS"
+
+      - name: Comment on PR with package info
+        uses: actions/github-script@v4
+        with:
+          script: |
+            const deps_info = '${{ steps.get_package_deps.outputs.info }}';
+            const rev_deps_info = '${{ steps.get_package_rev_deps.outputs.info }}';
+            const prNumber = context.payload.pull_request.number;
+            const message = `### Additional Package Information\n\n<details><summary>Depends on</summary>```txt\n${rev_deps_info}\n</details>\n\n<details><summary>Dependencies</summary>```txt\n${deps_info}\n</details>`;
+            await github.pulls.createReview({
+              ...context.repo,
+              pull_number: prNumber,
+              body: message,
+              event: 'COMMENT'
+            });
