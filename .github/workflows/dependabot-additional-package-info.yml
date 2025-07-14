@@ -18,8 +18,6 @@ jobs:
       - name: Extract package name and version
         id: extract_package
         run: |
-          # Extract the package name and version from the PR title
-          # Example PR title: "Bump package-name from x.x.x to y.y.y"
           echo "PR Title: ${{ github.event.pull_request.title }}"
           PACKAGE_NAME=$(echo "${{ github.event.pull_request.title }}" | sed -E 's/^Bump ([^ ]+) from .*/\1/')
           echo "PACKAGE_NAME=${PACKAGE_NAME}" >> $GITHUB_ENV
@@ -34,14 +32,12 @@ jobs:
       - name: Get package dependencies
         id: get_package_deps
         run: |
-          # Replace with your CLI command that accepts the package name
-          PACKAGE_DEPS=$(cargo tree $PACKAGE_NAME)
+          PACKAGE_DEPS=$(cargo tree --package $PACKAGE_NAME)
           echo "::set-output name=info::$PACKAGE_DEPS"
 
       - name: Get package reverse dependencies
         id: get_package_rev_deps
         run: |
-          # Replace with your CLI command that accepts the package name
           PACKAGE_REV_DEPS=$(cargo tree --inverse $PACKAGE_NAME)
           echo "::set-output name=info::$PACKAGE_REV_DEPS"
 
