@@ -33,9 +33,9 @@ jobs:
         id: get_package_deps
         run: |
           PACKAGE_DEPS=$(cargo tree --package $PACKAGE_NAME --quiet)
-          echo "package_deps=$PACKAGE_DEPS" | tee -a $GITHUB_OUTPUT
+          echo "package_deps<<EOF${PACKAGE_DEPS}EOF" | tee -a $GITHUB_OUTPUT
           PACKAGE_INV_DEPS=$(cargo tree --invert $PACKAGE_NAME --quiet)
-          echo "package_inv_deps=$PACKAGE_INV_DEPS" | tee -a $GITHUB_OUTPUT
+          echo "package_inv_deps<<EOF${PACKAGE_INV_DEPS}EOF" | tee -a $GITHUB_OUTPUT
 
       - name: Comment on PR with package info
         uses: actions/github-script@v4
