@@ -275,3 +275,6 @@ allow_unsafe = true
 
 [pkg.anstream]
 allow_unsafe = true
+
+[pkg.time-macros]
+allow_proc_macro = true
