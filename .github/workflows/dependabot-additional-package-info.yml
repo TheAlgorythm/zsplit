@@ -53,7 +53,7 @@ jobs:
             const inv_deps_info = `${{ steps.get_package_deps.outputs.package_inv_deps }}`;
             const prNumber = context.payload.pull_request.number;
             const message = `### Additional Package Information\n\n<details><summary>Depends on</summary>\n\n\`\`\`txt\n${inv_deps_info}\n\`\`\`\n\n</details>\n\n<details><summary>Dependencies</summary>\n\n\`\`\`txt\n${deps_info}\n\`\`\`\n\n</details>`;
-            await github.pulls.createReview({
+            await github.rest.pulls.createReview({
               ...context.repo,
               pull_number: prNumber,
               body: message,
