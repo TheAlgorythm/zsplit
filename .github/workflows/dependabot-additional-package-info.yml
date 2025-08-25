@@ -23,8 +23,10 @@ jobs:
         id: extract_package
         run: |
           echo "PR Title: ${{ github.event.pull_request.title }}"
-          PACKAGE_NAME=$(echo "${{ github.event.pull_request.title }}" | sed -E 's/^Bump ([^ ]+) from .*/\1/')
+          read PACKAGE_NAME OLD_VERSION NEW_VERSION < <(echo "${{ github.event.pull_request.title }}" | sed -E 's/^Bump ([^ ]+) from ([^ ]+) to ([^ ]+)$/\1 \2 \3/')
           echo "PACKAGE_NAME=${PACKAGE_NAME}" >> $GITHUB_ENV
+          echo "OLD_VERSION=${OLD_VERSION}" >> $GITHUB_ENV
+          echo "NEW_VERSION=${NEW_VERSION}" >> $GITHUB_ENV
 
       - name: Install latest stable
         uses: actions-rs/toolchain@v1
@@ -36,11 +38,11 @@ jobs:
       - name: Get package dependencies
         id: get_package_deps
         run: |
-          PACKAGE_DEPS=$(cargo tree --package $PACKAGE_NAME --quiet)
+          PACKAGE_DEPS=$(cargo tree --package ${PACKAGE_NAME}@${NEW_VERSION} --quiet --target all)
           echo "package_deps<<EOF" >> $GITHUB_OUTPUT
           echo "${PACKAGE_DEPS}" | tee -a $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
-          PACKAGE_INV_DEPS=$(cargo tree --invert $PACKAGE_NAME --quiet)
+          PACKAGE_INV_DEPS=$(cargo tree --invert ${PACKAGE_NAME}@${NEW_VERSION} --quiet --target all)
           echo "package_inv_deps<<EOF" >> $GITHUB_OUTPUT
           echo "${PACKAGE_INV_DEPS}" | tee -a $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
