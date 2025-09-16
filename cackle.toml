@@ -278,3 +278,9 @@ allow_unsafe = true
 
 [pkg.time-macros]
 allow_proc_macro = true
+
+[pkg.serde_core]
+build.allow_apis = [
+    "process",
+]
+allow_unsafe = true
