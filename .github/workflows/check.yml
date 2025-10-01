@@ -44,7 +44,7 @@ jobs:
         override: true
         components: rustc
     - name: Cache
-      uses: Swatinem/rust-cache@v2.8.0
+      uses: Swatinem/rust-cache@v2.8.1
     - name: Build
       run: cargo build --locked --release --verbose --workspace --exclude zsplit-cli
     - name: Run tests
@@ -60,7 +60,7 @@ jobs:
         override: true
         components: rustc
     - name: Cache
-      uses: Swatinem/rust-cache@v2.8.0
+      uses: Swatinem/rust-cache@v2.8.1
     - name: Build
       run: cargo build --locked --release --verbose
   lints:
