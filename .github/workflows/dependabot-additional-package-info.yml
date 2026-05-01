@@ -48,7 +48,7 @@ jobs:
           echo "EOF" >> $GITHUB_OUTPUT
 
       - name: Comment on PR with package info
-        uses: actions/github-script@v8
+        uses: actions/github-script@v9
         with:
           script: |
             const deps_info =`${{ steps.get_package_deps.outputs.package_deps }}`;
