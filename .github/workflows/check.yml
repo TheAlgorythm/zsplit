@@ -19,7 +19,7 @@ jobs:
       SCCACHE_GHA_ENABLED: "true"
       RUSTC_WRAPPER: "sccache"
     steps:
-    - uses: actions/checkout@v6
+    - uses: actions/checkout@v7
     - name: Install latest stable
       uses: actions-rs/toolchain@v1
       with:
@@ -36,7 +36,7 @@ jobs:
   build-lib-msrv:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v6
+    - uses: actions/checkout@v7
     - name: Install oldest supported Rust version
       uses: actions-rs/toolchain@v1
       with:
@@ -52,7 +52,7 @@ jobs:
   build-all-msrv:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v6
+    - uses: actions/checkout@v7
     - name: Install oldest supported Rust version
       uses: actions-rs/toolchain@v1
       with:
@@ -66,7 +66,7 @@ jobs:
   lints:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - name: Install latest stable
         uses: actions-rs/toolchain@v1
         with:
