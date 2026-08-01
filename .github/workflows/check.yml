@@ -28,7 +28,7 @@ jobs:
         components: rustc
 
     - name: Sccache Action
-      uses: Mozilla-Actions/sccache-action@v0.0.10
+      uses: Mozilla-Actions/sccache-action@v0.0.11
     - name: Build
       run: cargo build --locked --release --verbose
     - name: Run tests
